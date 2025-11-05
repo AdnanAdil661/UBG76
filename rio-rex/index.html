@@ -1,0 +1,151 @@
+<!-- 1761141605975 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./patch/_cloner-v3-13.js"></script>
+<script src="./patch/_cloner-monitor-v1.js?/crazygames=ubg76/rio-rex/"></script>
+<script src="./patch/crazygames/_cloner.js"></script>
+
+    <meta charset="utf-8" />
+    <title>rio-rex UnityLoader V3</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        /* Page + Unity canvas */
+        html,body {
+            margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:#000;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        #unity-container { width:100%; height:100%; position:relative; }
+        #unity-canvas { width:100%; height:100%; display:block; background:#000; }
+
+        /* Fullscreen loader overlay */
+        #loader {
+            position: fixed;
+            inset: 0; /* top:0; right:0; bottom:0; left:0; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: #ffffff;
+            z-index: 9999;
+        }
+
+        /* Circular progress */
+        .circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            box-sizing: border-box;
+            border: 10px solid #e6f4ff;       /* light ring */
+            border-top-color: #8fd3ff;        /* pale blue rotating part */
+            animation: spin 1s linear infinite;
+            -webkit-animation: spin 1s linear infinite;
+            display: block;
+        }
+
+        #progress-text {
+            margin-top: 18px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #4da6ff;
+            letter-spacing: 0.2px;
+        }
+
+        /* small error area */
+        #loader-error {
+            margin-top: 12px;
+            color: #b00020;
+            font-size: 14px;
+            display: none;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @-webkit-keyframes spin { to { -webkit-transform: rotate(360deg); } }
+
+        /* Make canvas visible under loader */
+        #unity-container.blur::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.65);
+            pointer-events: none;
+        }
+
+        /* small helper for fallback link */
+        #download-link { color: #0066cc; text-decoration: underline; cursor: pointer; }
+    </style>
+</head>
+<body style= "margin: 0px; padding: 0px; overflow: hidden;">
+    <div id="unity-container">
+        <canvas id="unity-canvas"></canvas>
+    </div>
+
+    <!-- Loader overlay (visible while Unity loads) -->
+    <div id="loader" role="status" aria-live="polite">
+        <div class="circle" aria-hidden="true"></div>
+        <div id="progress-text">0%</div>
+        <div id="loader-error"></div>
+    </div>
+
+    <script src="./patch/crazygames/sdk-v1.js"></script>
+    <script src="./patch/crazygames/sdk-v2.js"></script>
+    <script src="./patch/crazygames/sdk-v3.js"></script>
+    <script src="./patch/crazygames/UnityLoader-v3.js"></script>
+
+    <!-- Loader logic (inline, single-file) -->
+    <script>
+        (function () {
+            // Path to your build's JSON
+            var buildJsonPath = "6a7bb4f2e589f5bca069192e971aa345.json?unityv3&.json";
+
+            var canvasId = "unity-canvas"; // id used when instantiating UnityLoader
+            var loaderOverlay = document.getElementById("loader");
+            var progressText = document.getElementById("progress-text");
+            var loaderError = document.getElementById("loader-error");
+
+            // Utility to show error text in loader
+            function showError(msg) {
+                loaderError.style.display = "block";
+                loaderError.innerText = msg;
+            }
+
+            if (typeof UnityLoader === "undefined") {
+                progressText.innerText = "0%";
+                showError("UnityLoader-v3.js not found. Please paste UnityLoader-v3.js into this HTML (see comment).");
+                console.error("UnityLoader is undefined — paste UnityLoader-v3.js content into the HTML.");
+                return;
+            }
+
+            try {
+                UnityLoader.instantiate(
+                    canvasId,
+                    buildJsonPath,
+                    {
+                        onProgress: function(unityInstance, progress) {
+                            var percent = Math.round(progress * 100);
+                            progressText.innerText = percent + "%";
+
+                            if (progress >= 1) {
+                                setTimeout(function() {
+                                    loaderOverlay.style.display = "none";
+                                }, 250);
+                            }
+                        },
+                        Module: {
+                            onAbort: function(msg) {
+                                showError("Load aborted: " + (msg || "unknown error"));
+                                console.error("Unity load aborted:", msg);
+                            }
+                        }
+                    }
+                );
+            } catch (e) {
+                showError("Failed to start Unity: " + (e && e.message ? e.message : e));
+                console.error("Exception calling UnityLoader.instantiate:", e);
+            }
+        })();
+    </script>
+</body>
+</html>

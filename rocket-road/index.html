@@ -1,0 +1,101 @@
+<!-- 1744111889326 -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="./patch/cloner-v2.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Rocket Road</title>
+    <link href="main.85559a98.css" rel="stylesheet" />
+  </head>
+  <style>
+    @font-face {
+      font-family: Dosis-Bold;
+      src: url(fonts/Dosis-Bold.ttf) format("truetype");
+    }
+    body,
+    html {
+      position: fixed;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      touch-action-delay: none;
+      touch-action: none;
+      -ms-touch-action: none;
+      -ms-content-zooming: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+  <body style= "margin: 0px; padding: 0px; overflow: hidden;">
+    <main></main>
+    <script src="./assets/js/gamesnacks.js"></script>
+    <script src="game/proj.min.js"></script>
+    <script type="text/javascript" src="bundle.85559a98.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="./patch/google/gtag.js?https://www.googletagmanager.com/gtag/js?id=UA-192947899-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-192947899-1');
+</script>
+
+    <script type="text/javascript">
+      window.SDK_OPTIONS = {
+        gameId: "rb0uusb5nhvetbe5qeql6w8s6p3e72jz",
+        onEvent: function (a) {
+          switch (a.name) {
+            case "SDK_GAME_PAUSE":
+              // pause game logic / mute audio
+              GAME_API.soundOn();
+              GAME_API.gameplayPause();
+              break;
+            case "SDK_GAME_START":
+              gtag('event', 'SHOW_AD', {'event_category': 'SHOW_AD','event_label': 'rocket_road'});
+              // advertisement done, resume game logic and unmute audio
+			        GAME_API.gameplayReset();
+              break;
+            case "SDK_READY":
+              gtag('event', 'SDK_READY', {'event_category': 'SDK_READY','event_label': 'rocket_road'});
+              // when sdk is ready
+              break;
+          }
+        },
+      };
+      (function (a, b, c) {
+        var d = a.getElementsByTagName(b)[0];
+        a.getElementById(c) ||
+          ((a = a.createElement(b)),
+          (a.id = c),
+          (a.src = "./patch/gamemonetize/sdk.js?https://api.gamemonetize.com/sdk.js"),
+          d.parentNode.insertBefore(a, d));
+      })(document, "script", "gamemonetize-sdk");
+    </script>
+    <script>
+      // bind play and restart btn
+      document.getElementsByClassName("btn-main-circled")[0].addEventListener('click', function () {
+		  console.info('show ad..')
+        if (typeof sdk !== "undefined" && sdk.showBanner !== "undefined") {
+          sdk.showBanner();
+        }
+      },true);
+    </script>
+  <script>
+(function (a, b, c) {
+   var d = a.getElementsByTagName(b)[0];
+   a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "./patch/gamemonetize/sdk_preload.js?https://api.gamemonetize.com/sdk_preload.js?v=" + Date.now(), d.parentNode.insertBefore(a, d))
+})(document, "script", "gamemonetize-preload-api"); 
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!-- 1748948375212 -->
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <script src="./patch/cloner-v27.js"></script>
+<meta charset="UTF-8">
+<title>Retro Snake</title>
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="stylesheet" href="./game.css">
+<script type="text/javascript">
+   window.SDK_OPTIONS = {
+      gameId: "rhq1plsvdfdcymcg2hj4kpi7y8yk4i5d",
+      onEvent: function (a) {
+         switch (a.name) {
+            case "SDK_GAME_PAUSE":
+               // pause game logic / mute audio
+               break;
+            case "SDK_GAME_START":
+               // advertisement done, resume game logic and unmute audio
+               break;
+            case "SDK_READY":
+               sdk.showBanner();
+               break;
+         }
+      }
+   };
+(function (a, b, c) {
+   var d = a.getElementsByTagName(b)[0];
+   a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "./patch/gamemonetize/sdk.js?https://api.gamemonetize.com/sdk.js", d.parentNode.insertBefore(a, d))
+})(document, "script", "gamemonetize-sdk"); 
+</script>
+</head>
+<body style= "margin: 0px; padding: 0px; overflow: hidden;">
+<header class="wrap"><p class="score">score: <span id="score_value">0</span></p></header>
+<canvas class="wrap" id="snake" width="360" height="600" tabindex="1"></canvas>
+<div id="gameover">
+	<h2>Game Over!</h2>
+	<p>Score</p>
+	<h2 id="score_value_gameover">0</h2>
+	<p id="best_score_desc"></p>
+	<p>Best Score</p>
+	<h2 id="best_score_value">0</h2>
+	<br><a id="newgame_gameover">play again</a>
+	<a id="setting_gameover">settings</a>
+</div>
+<div id="setting">
+	<h2>Settings</h2>
+	<p>Speed:
+		<input id="speed1" type="radio" name="speed" value="100" />
+		<label for="speed1">Slow</label>
+		<input id="speed2" type="radio" name="speed" value="70" checked/>
+		<label for="speed2">Normal</label>
+		<input id="speed3" type="radio" name="speed" value="40"/>
+		<label for="speed3">Fast</label>
+	</p>
+	<p>Walls:
+		<input id="wallon" type="radio" name="wall" value="1" checked/>
+		<label for="wallon">On</label>
+		<input id="walloff" type="radio" name="wall" value="0"/>
+		<label for="walloff">Off</label>
+	</p>
+	<p><a id="newgame_setting">play</a></p>
+	<p id="branding"></p>
+</div>
+<div id="menu">
+	<h2>Retro Snake</h2>
+	<a id="newgame_menu">new game</a>
+	<a id="setting_menu">settings</a>
+</div>
+<script src="./gameobf.js"></script>
+</body>
+</html>
