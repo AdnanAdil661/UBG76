@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en-us" style="background-color:#000;">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="canonical" href="http://craftnite.io" />
+    <title>Craftnite.io - Play Minecraft & Fortnite in your browser</title>
+	<meta name="description" content="Craftnite - The #1 hit game mixing Minecraft and Fortnite. Build blocky stairs, dig tunnels to take other players down!">
+	<meta property="og:locale" content="en" />
+	<meta property="og:title" content="Craftnite.io - Play Minecraft & Fortnite in your browser" />
+	<meta property="og:description" content="Craftnite - The #1 hit game mixing Minecraft and Fortnite. Build blocky stairs, dig tunnels to take other players down!" />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content="http://craftnite.io" />
+	<meta property="og:image" content="http://craftnite.io/og.jpg" />
+	<meta property="og:image:width" content="979" />
+	<meta property="og:image:height" content="604" />
+	<meta property="og:site_name" content="craftnite.io" />
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@X1PdotCOM">
+	<meta name="twitter:creator" content="@X1PdotCOM">
+	<meta name="twitter:title" content="craftnite.io">
+	<meta name="twitter:description" content="">
+	<meta name="twitter:image" content="https://craftnite.io/thumbnail-big.png">
+	
+	<script>
+		var wwAdCompleteCallback = function(){};
+		var wwShowVideoAdTime = 0;
+		var wwInVideoAd = false;
+		var wwIsOnline = true;
+		var SKINS = ["aladdin","alice","angel","anonymous","arcticFox","army","artist","astronaut","batman","beaver","blackWitch","bobRoss","burger","buzzLightyear","cactus","canadianHockey","captainAmerica","cheerleader","chicken","cookieMonster","coolGuy","countryGirl","cow","cristianoRonaldo","croco","crosby","deadpool","dog","donaldDuck","donna","duck","duke","electricPanda","electricRobot","elf","elsa","emilie","eminem","emo","fbi","fireFighter","fox","frankenstein","frog","geisha","ghostWidow","godfather","gryffindor","hippy","homer","horse","hulk","ironman","jackSparrow","jenny","jesus","joker","karateKid","kawaiiGirl","lebronJames","legendary","lion","lover","luigi","lukeSkywalker","mario","monkey","monster","monsterInc","navy","ninja","ohMyGod","owl","parrot","peach","penguin","pikachuGirl","policeMan","popCorn","potatoMan","queen","rainbowHair","redHead","robinHood","robot","santa","shrek","skeleton","skeletonPirate","soulEater","superman","trooper","trump","viking","vikingKing","werewolf","whiteDevil","wonderWoman","woody","yeti","yoshi","zeus"];var wwClientIp = "162.158.114.182";	</script>
+	
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+	<link rel="stylesheet" type="text/css" href="style/style.css?v=1">
+	
+	<script>			
+		window.aiptag = window.aiptag || {cmd: []};
+
+		aiptag.cmd.display = aiptag.cmd.display || [];	aiptag.cmd.player = aiptag.cmd.player || [];
+
+		// Show GDPR consent tool
+		// If you use your own GDPR consent tool please set aiptag.gdprConsent = false; if an EU user has declined or not yet accepted marketing cookies, for users outside the EU or for users that accepted the GDPR please use aiptag.gdprConsent = true;
+		aiptag.cmp = {};
+		aiptag.cmp.show = true;
+		aiptag.cmp.position = "centered";
+		aiptag.cmp.button = false;
+		aiptag.gdprShowConsentTool = true;
+
+		
+		aiptag.cmd.player.push(function() {
+			adplayer = new aipPlayer({			
+				AD_WIDTH: 960,
+				AD_HEIGHT: 540,
+				AD_FULLSCREEN: true,
+				AD_CENTERPLAYER: false,
+				LOADING_TEXT: 'loading advertisement, game will resume shortly...',
+				PREROLL_ELEM: function(){return document.getElementById('preroll')},
+				AIP_COMPLETE: function ()  {
+					/*******************
+					 ***** WARNING *****
+					 *******************
+					 Please do not remove the PREROLL_ELEM
+					 from the page, it will be hidden automaticly.
+					 If you do want to remove it use the AIP_REMOVE callback.
+					*/
+					if (wwAdCompleteCallback)
+						wwAdCompleteCallback();
+					wwAdCompleteCallback = false; 
+					
+					wwInVideoAd = false;
+					//alert("Ad Completed");
+				},
+				AIP_REMOVE: function ()  {
+					// Here it's save to remove the PREROLL_ELEM from the page.
+					// But it's not necessary.
+				}
+			});
+		});
+	</script>
+
+	<script src="//api.adinplay.com/libs/aiptag/pub/SVV/craftnite.io/tag.min.js"></script>
+
+	<script>
+		var adBlockOn = true;
+		if (typeof aiptag !== 'undefined')
+			adBlockOn = false;
+	</script>
+	
+	
+	<script id='LeChuckAPIjs' src="https://ssl.minijuegosgratis.com/lechuck/js/latest.js"></script>
+	<script type='text/javascript'>
+	lechuck = new LeChuckAPI({});
+	function miniplaySend2API(stat,value) {
+		lechuck.stat.put(function(response){
+		// console.log(response);
+		}, stat,value);
+	}
+	</script>
+	
+	<!-- BEGIN CPMSTAR ANCHOR AD CODE
+	<script type="text/javascript">
+	var cpmstar_anchorad_settings = {
+	poolid: 83375, //Pool ID assigned by CPMStar
+	dir: 1
+	};
+
+	(function (d, t, s) { t = d.createElement('script'); t.type = 'text/javascript'; t.src = (d.location.protocol == 'https:'?'//server':'//cdn') + '.cpmstar.com/cached/js/anchorad_v100.pack.js'; t.async = true; s = d.getElementsByTagName('script')[0]; s.parentNode.insertBefore(t, s); })(document, {}, {});
+	</script>
+	<!-- END CPMSTAR ANCHOR AD CODE -->
+  </head>
+  <body id="body" style="background-color:#000;display:none;" onload="onload()">
+	<input type="text" id="chat" style="display:none" value="[Enter] to chat" maxlength="100">
+	<div id="backgroundwrap">
+		<div id="backgroundover"></div>
+		<div id="background"></div>
+		<video id="videobg" style="" autoplay loop muted>
+			<!--<source src="bg.webm" type="video/webm">-->
+			
+			<source src="bg-videos/bg2.mp4" type="video/mp4">
+			<source src="bg-videos/bg2.ogg" type="video/ogg">
+					</video>
+	</div>
+	<div id="topwrap">
+		<img id="logo" src="logo.png" title="Craftnite" alt="Craftnite">
+	</div>
+	<div id="leftwrap">
+		<div id='craftnite-io_300x250'>
+			<script type='text/javascript'>
+				aiptag.cmd.display.push(function() { aipDisplayTag.display('craftnite-io_300x250'); });
+			</script>
+		</div>
+	</div>
+	<div id="middlewrap">
+		<div id="middle">
+			<input id="name" type="text" placeholder="Enter a name" value="" maxlength="20">
+			<select id="skin" name="skin">
+			
+				<option value="0" data-imagesrc="skin/icon/aladdin.png" >aladdin</option><option value="1" data-imagesrc="skin/icon/alice.png" >alice</option><option value="2" data-imagesrc="skin/icon/angel.png" >angel</option><option value="3" data-imagesrc="skin/icon/anonymous.png" >anonymous</option><option value="4" data-imagesrc="skin/icon/arcticFox.png" >arcticFox</option><option value="5" data-imagesrc="skin/icon/army.png" >army</option><option value="6" data-imagesrc="skin/icon/artist.png" >artist</option><option value="7" data-imagesrc="skin/icon/astronaut.png" >astronaut</option><option value="8" data-imagesrc="skin/icon/batman.png" >batman</option><option value="9" data-imagesrc="skin/icon/beaver.png" >beaver</option><option value="10" data-imagesrc="skin/icon/blackWitch.png" >blackWitch</option><option value="11" data-imagesrc="skin/icon/bobRoss.png" >bobRoss</option><option value="12" data-imagesrc="skin/icon/burger.png" >burger</option><option value="13" data-imagesrc="skin/icon/buzzLightyear.png" >buzzLightyear</option><option value="14" data-imagesrc="skin/icon/cactus.png" >cactus</option><option value="15" data-imagesrc="skin/icon/canadianHockey.png" >canadianHockey</option><option value="16" data-imagesrc="skin/icon/captainAmerica.png" >captainAmerica</option><option value="17" data-imagesrc="skin/icon/cheerleader.png" >cheerleader</option><option value="18" data-imagesrc="skin/icon/chicken.png" >chicken</option><option value="19" data-imagesrc="skin/icon/cookieMonster.png" >cookieMonster</option><option value="20" data-imagesrc="skin/icon/coolGuy.png" >coolGuy</option><option value="21" data-imagesrc="skin/icon/countryGirl.png" >countryGirl</option><option value="22" data-imagesrc="skin/icon/cow.png" >cow</option><option value="23" data-imagesrc="skin/icon/cristianoRonaldo.png" >cristianoRonaldo</option><option value="24" data-imagesrc="skin/icon/croco.png" >croco</option><option value="25" data-imagesrc="skin/icon/crosby.png" >crosby</option><option value="26" data-imagesrc="skin/icon/deadpool.png" >deadpool</option><option value="27" data-imagesrc="skin/icon/dog.png" >dog</option><option value="28" data-imagesrc="skin/icon/donaldDuck.png" >donaldDuck</option><option value="29" data-imagesrc="skin/icon/donna.png" >donna</option><option value="30" data-imagesrc="skin/icon/duck.png" >duck</option><option value="31" data-imagesrc="skin/icon/duke.png" >duke</option><option value="32" data-imagesrc="skin/icon/electricPanda.png" >electricPanda</option><option value="33" data-imagesrc="skin/icon/electricRobot.png" >electricRobot</option><option value="34" data-imagesrc="skin/icon/elf.png" >elf</option><option value="35" data-imagesrc="skin/icon/elsa.png" >elsa</option><option value="36" data-imagesrc="skin/icon/emilie.png" >emilie</option><option value="37" data-imagesrc="skin/icon/eminem.png" >eminem</option><option value="38" data-imagesrc="skin/icon/emo.png" >emo</option><option value="39" data-imagesrc="skin/icon/fbi.png" >fbi</option><option value="40" data-imagesrc="skin/icon/fireFighter.png" >fireFighter</option><option value="41" data-imagesrc="skin/icon/fox.png" >fox</option><option value="42" data-imagesrc="skin/icon/frankenstein.png" >frankenstein</option><option value="43" data-imagesrc="skin/icon/frog.png" >frog</option><option value="44" data-imagesrc="skin/icon/geisha.png" >geisha</option><option value="45" data-imagesrc="skin/icon/ghostWidow.png" >ghostWidow</option><option value="46" data-imagesrc="skin/icon/godfather.png" >godfather</option><option value="47" data-imagesrc="skin/icon/gryffindor.png" >gryffindor</option><option value="48" data-imagesrc="skin/icon/hippy.png" >hippy</option><option value="49" data-imagesrc="skin/icon/homer.png" >homer</option><option value="50" data-imagesrc="skin/icon/horse.png" >horse</option><option value="51" data-imagesrc="skin/icon/hulk.png" >hulk</option><option value="52" data-imagesrc="skin/icon/ironman.png" >ironman</option><option value="53" data-imagesrc="skin/icon/jackSparrow.png" >jackSparrow</option><option value="54" data-imagesrc="skin/icon/jenny.png" >jenny</option><option value="55" data-imagesrc="skin/icon/jesus.png" >jesus</option><option value="56" data-imagesrc="skin/icon/joker.png" >joker</option><option value="57" data-imagesrc="skin/icon/karateKid.png" >karateKid</option><option value="58" data-imagesrc="skin/icon/kawaiiGirl.png" >kawaiiGirl</option><option value="59" data-imagesrc="skin/icon/lebronJames.png" >lebronJames</option><option value="60" data-imagesrc="skin/icon/legendary.png" >legendary</option><option value="61" data-imagesrc="skin/icon/lion.png" >lion</option><option value="62" data-imagesrc="skin/icon/lover.png" >lover</option><option value="63" data-imagesrc="skin/icon/luigi.png" >luigi</option><option value="64" data-imagesrc="skin/icon/lukeSkywalker.png" >lukeSkywalker</option><option value="65" data-imagesrc="skin/icon/mario.png" >mario</option><option value="66" data-imagesrc="skin/icon/monkey.png" >monkey</option><option value="67" data-imagesrc="skin/icon/monster.png" >monster</option><option value="68" data-imagesrc="skin/icon/monsterInc.png" >monsterInc</option><option value="69" data-imagesrc="skin/icon/navy.png" >navy</option><option value="70" data-imagesrc="skin/icon/ninja.png" >ninja</option><option value="71" data-imagesrc="skin/icon/ohMyGod.png" >ohMyGod</option><option value="72" data-imagesrc="skin/icon/owl.png" >owl</option><option value="73" data-imagesrc="skin/icon/parrot.png" >parrot</option><option value="74" data-imagesrc="skin/icon/peach.png" >peach</option><option value="75" data-imagesrc="skin/icon/penguin.png" >penguin</option><option value="76" data-imagesrc="skin/icon/pikachuGirl.png" >pikachuGirl</option><option value="77" data-imagesrc="skin/icon/policeMan.png" >policeMan</option><option value="78" data-imagesrc="skin/icon/popCorn.png" >popCorn</option><option value="79" data-imagesrc="skin/icon/potatoMan.png" >potatoMan</option><option value="80" data-imagesrc="skin/icon/queen.png" >queen</option><option value="81" data-imagesrc="skin/icon/rainbowHair.png" >rainbowHair</option><option value="82" data-imagesrc="skin/icon/redHead.png" >redHead</option><option value="83" data-imagesrc="skin/icon/robinHood.png" >robinHood</option><option value="84" data-imagesrc="skin/icon/robot.png" >robot</option><option value="85" data-imagesrc="skin/icon/santa.png" >santa</option><option value="86" data-imagesrc="skin/icon/shrek.png" >shrek</option><option value="87" data-imagesrc="skin/icon/skeleton.png" >skeleton</option><option value="88" data-imagesrc="skin/icon/skeletonPirate.png" >skeletonPirate</option><option value="89" data-imagesrc="skin/icon/soulEater.png" >soulEater</option><option value="90" data-imagesrc="skin/icon/superman.png" >superman</option><option value="91" data-imagesrc="skin/icon/trooper.png" >trooper</option><option value="92" data-imagesrc="skin/icon/trump.png" >trump</option><option value="93" data-imagesrc="skin/icon/viking.png" >viking</option><option value="94" data-imagesrc="skin/icon/vikingKing.png" >vikingKing</option><option value="95" data-imagesrc="skin/icon/werewolf.png" selected="selected">werewolf</option><option value="96" data-imagesrc="skin/icon/whiteDevil.png" >whiteDevil</option><option value="97" data-imagesrc="skin/icon/wonderWoman.png" >wonderWoman</option><option value="98" data-imagesrc="skin/icon/woody.png" >woody</option><option value="99" data-imagesrc="skin/icon/yeti.png" >yeti</option><option value="100" data-imagesrc="skin/icon/yoshi.png" >yoshi</option><option value="101" data-imagesrc="skin/icon/zeus.png" >zeus</option>			</select>
+			<input id="playbtn" type="button" value="Loading..." onclick="wwStartBtn();" disabled>
+		</div>
+	</div>
+	<div id="rightwrap">
+		<div id="right">
+			<!--<div style="color:red;font-size:20px;">
+					We're pushing a maintenance update. Make sure to reload the page and refresh your cache (press Ctrl+ F5) if you're encountering issues.
+				</div>-->
+			<div id="social">
+				<h2>Social</h2>
+				<div id="socialbg">
+					<a href="https://discord.gg/Xjj99RF7z7" target="_blank" id="discord"><img src="https://taming.io/img/discord.png" height="32"></a><a id="reddit" href="https://webgames.io" title="Play more online webgames on Webgames.io" target="_blank"><img src="https://webgames.io/img/biscuit-no-border.png" height="40"</a><a id="share" href="#" title="share this game" class="a2a_dd"><img src="share4.svg" height="24"></a>
+				</div>
+			</div>
+			<div id="modwrap">
+				<!--
+				<div style="color:red;font-size:20px;">
+					* <b>Server disconnection</b> We're aware of the current server issue and working to fix ASAP. 
+				</div>
+				
+				<div style="color:#00ffd5;font-size:14px;">
+					NEW MAP COMING SOON!
+				</div>
+				-->
+			</div>
+			
+			
+			<input type="hidden" id="modselect" value="infinite_ffa">
+			
+						
+			
+			<div id="how-to-play">
+				<h2>
+					How to Play
+				</h2>
+				<p>
+					<span class="slash">/</span> Take down other players to reach the #1 spot, win stairs and dynamite. 
+					<span class="slash">/</span> Build stairs to reach high ground.
+					<span class="slash">/</span> Throw dynamite to destroy everything around!
+					<span class="slash">/</span> Farm trees to loot stairs.
+					<span class="slash">/</span> Headshots will give you more loot.
+				</p>
+				<h2>
+					Controls
+				</h2>
+				<ul>
+					<li>
+						WASD: move
+					</li>
+					<li>
+						SPACE: jump
+					</li>
+					<li>
+						LEFT-CLICK: use item
+					</li>
+					<li>
+						1,2,3,4,5: switch item
+					</li>
+				</ul>
+				<p>
+					(You can edit keybinds in options)
+				</p>
+			</div>
+		</div>	
+	</div>
+
+	<div id="preroll"></div>
+    <div id="gameContainer"></div>
+	<!--
+	<iframe id="newsletter" style="display:none;position: absolute;right: -3px;bottom: 39px;width: 167px;height: 150px;border: 0;" src="http://craftnite.io/newsletter-form.html"></iframe>
+	<a style="
+	display:none;
+	background-color: rgba(0,0,0,0.5);
+    width: 44px;
+    height: 33px;
+    text-align: center;
+    padding-top: 5px;
+    padding-right: 3px;
+    position: absolute;
+    right: -3px;
+    bottom: 200px;" href="#" title="share this game" class="a2a_dd"><img src="share4.svg" height="26">
+	</a>
+	-->
+	<div id="topleft">
+		<!--<a href="https://addictinggames.com" target="_blank"><img src="addictingGames.png" width="200"></a>-->
+	</div>
+	<div id="topright" style="display:block">
+		<!--Check out our other game!-->
+		
+	
+
+		<div id="cross-promo" style="transform: scale(1.25); transform-origin: top right;">
+			<a id="alsoTryLink" href="" target="_blank" style="cursor:url(./img/interface/cursor-pointer.png) 16 0, pointer;">
+				<img draggable="false" id="alsoTryImg" src="https://webgames.io/img/loading-widget.png" alt="Also play our other games!" style="cursor:url(./img/interface/cursor-pointer.png) 16 0, pointer;">
+			</a>
+			<div id="also-play-text" class="text-sb">ALSO PLAY</div>
+		</div>	
+	</div>
+
+	<div id="bottommiddle">
+		<a href="changelog.html">beta v.0.1.92 [changelog]</a> - <a target="_blank" href="credits.html">credits</a> - <a href="privacy.html">privacy policy</a>
+	</div>
+	<div id="bottomleft">
+		<a href="https://webgames.io" target="_blank" style="font-size:20px">More .io games</a>
+	</div>
+	<div id="bottomright">
+		add your <a target="_blank" href="https://discord.gg/Xjj99RF7z7">map | skin</a>
+	</div>
+	
+		<script>
+		function inIframe () {
+			try {
+				return window.self !== window.top;
+			} catch (e) {
+				return true;
+			}
+		}
+		
+		function onload()
+		{
+			if (inIframe())
+			{
+				//document.getElementById('bottom').style.position = 'relative';
+				//document.getElementById('fullscreen').style.display = 'block';
+				//document.getElementById('close').style.display = 'inline';
+			}
+			else
+			{
+				//document.getElementById('closebar').style.display = 'block';
+			}		
+			
+			document.getElementById('body').style.display = 'block';
+		}
+		
+		function closeBar()
+		{
+			//document.getElementById('bottom').style.display = 'none';
+		}
+		
+		function closeNewsletterIframe()
+		{
+			//document.getElementById('newsletter').style.display = 'none';
+		}
+		</script>
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="./patch/google/gtag.js?https://www.googletagmanager.com/gtag/js?id=UA-78561996-17"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-78561996-17');
+		</script>
+
+	<script>
+		var a2a_config = a2a_config || {};
+		a2a_config.onclick = 1;
+		a2a_config.linkurl = 'http://craftnite.io';
+	</script>
+
+	<script src="//static.addtoany.com/menu/page.js" async></script>
+	
+	<!-- BEGIN CPMSTAR ANCHOR AD CODE -->
+	<!--<script type="text/javascript">
+		var cpmstar_anchorad_settings = {
+			poolid: 79403, //Pool ID assigned by CPMStar
+			dir: -1
+			};
+
+		(function (d, t, s) { t = d.createElement('script'); t.type = 'text/javascript'; t.src = (d.location.protocol == 'https:'?'//server':'//cdn') + '.cpmstar.com/cached/js/anchorad_v100.pack.js'; t.async = true; s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(t, s); })(document, {}, {});
+	</script>
+	<!-- END CPMSTAR ANCHOR AD CODE -->
+	
+	
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+		<script src="jquery.ddslick.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
+			
+	<script>
+	jQuery('#skin').ddslick({
+		width:'100%', 
+		height: '200px', 
+		background: '#fff',
+		onSelected: function (obj){
+			playerSkin = parseInt(obj.selectedData.value);
+		}
+	});
+	</script>
+
+	
+	<script src="main.js?v=10"></script>
+	<script src="G.js?v=10"></script>
+	<script src="sup.js?v=10"></script>
+	<script src="yo.js?v=10"></script>
+	<script src="bro.js?v=10"></script>
+	<script>
+	var playBtn = document.getElementById("playbtn");
+	playBtn.disabled = false;
+	playBtn.value = 'Play';
+	
+	function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+	</script>
+	<script type="x-shader/x-vertex" id="vertexShader">
+		varying vec3 vWorldPosition;
+		void main() {
+			vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+			vWorldPosition = worldPosition.xyz;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+		}
+	</script>
+	<script type="x-shader/x-fragment" id="fragmentShader">
+		uniform vec3 topColor;
+		uniform vec3 bottomColor;
+		uniform float offset;
+		uniform float exponent;
+		varying vec3 vWorldPosition;
+		void main() {
+			float h = normalize( vWorldPosition + offset ).y;
+			gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+		}
+	</script>
+
+	<script src="https://webgames.io/js/widget.min.js?cf2"></script>
+	<script>
+		Widget.bind ({
+
+			reference: "craftnite.io",			
+
+			crossPromotion : {
+
+				showBiscuit : {	
+					border : true
+				},
+
+				container : "cross-promo",
+				link : "alsoTryLink",
+				img : "alsoTryImg",
+			},
+
+			ads : {
+
+				mediator: "none",
+				refresh : "refresh",
+				replace : [
+					["craftnite-io_300x250", "300x600", "random"],
+				],
+			}
+		});
+	</script>
+
+	<script type="application/javascript" src="https://sdki.truepush.com/sdk/v2.0.3/app.js" async></script>
+	<script>
+		var truepush = window.truepush || [];
+		truepush.push(function(){
+			truepush.Init({
+				id: "604cfed8325c03a9224f4e61"
+			}, function(error){
+			if(error) console.error(error);
+			})
+		    })
+	</script>
+  </body>
+</html>
