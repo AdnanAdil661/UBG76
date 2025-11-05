@@ -1,0 +1,87 @@
+<div class="popup gifting-popup" v-if="popup.page == 'Gifting'">
+    <div class="popup-header">
+        <span v-on:click="popup.page = 'Subscription'" class="fa fa-arrow-left popup-back"></span>
+        <span class="title">Tribals+ Gifting ({{activeTier}})</span>
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="popup-content-center popup-no-pad popup-no-scroll">
+
+        <div class="tiers-container">
+            <h2>Choose a tier to gift:</h2>
+            <div class="subscription-tiers">
+                <li 
+                v-for="(tier, index) in tiers"
+                :key="index"
+                :class="{ 'active': activeTier === tier.name }"
+                @click="selectTier(tier.name)"
+                :data-tooltip="'🎁 Gift ' + tier.name + ' of Tribals+!'">
+                    <span class="check-icon">
+                        <i class="fa fa-square-o check-icon-not-checked" aria-hidden="true"></i>
+                        <i class="fa fa-check-square-o check-icon-checked" aria-hidden="true"></i>
+                    </span>
+                    <span class="tier">{{tier.name}}</span>
+                    <span class="price">{{fixedPrice(tier.price[localization.currencyCode] * localization.exchangeRate)}} {{localization.currencyCode}} / <small> {{tier.timeFrame}} </small></span>
+                </li>
+            </div>
+
+            <h2>🎁 You are creating a {{activeTier}} Tribals+ Code to gift to someone! 🎁</h2>
+
+            <div class="line"></div>
+            <div class="gift-example">
+                <p>
+                    This is how your Gift Code will look like when you share it in different social medias like Discord, Whatsapp, Twitter, etc.
+                </p>
+                <img src="Gift-Share.jpg" alt="Gift">
+            </div>
+        </div>
+    </div>
+    
+    <div class="popup-bottom-content align-fit">
+        <p>
+            This is a one time purchase, not a subscription!</br>You can only make a subscription for yourself!
+        </p>
+        
+        <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="giftTribalsPlus()" class="btn btn-tribals btn-primary btn-gift-buy">
+            <b v-if="!waitingForPayment">
+                <i class="fa fa-check icon"></i>
+                <span aria-hidden="true"></span> Buy
+            </b>
+            <b v-if="waitingForPayment">
+                Redirecting...
+            </b>
+        </button>
+    </div>
+</div>
+
+<div class="popup" v-if="popup.page == 'GiftConfirmation'">
+    <div class="popup-header">
+        <span class="title">Your Tribals+ gift code!</span>
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+    <div class="popup-content-center popup-no-pad popup-no-scroll">
+        <h1 style="margin-top: 40px;">🎁 Thank you for purchasing a gift! 🎁</h1>
+        <h2 style="color: #ffdf00; margin-bottom: 0px; margin-top: 60px;">Here is your gift code:</h2>
+        <h3 style="margin-top: 20px; font-size: 40px;"><a data-tooltip="Click here to copy your gift code!" href="javascript:;" v-on:click="copyCode()"><i class="fa fa-clone" aria-hidden="true"></i></a> {{giftingCode}}</h3>
+    </div>
+    <div class="popup-bottom-content align-fit">
+        <p style="width: 300px;">
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Questions? Join our <span style="color: #7289da;">Discord <img src="discord_icon.png" alt="Discord Icon" style="width: 10px; height: 10px;"></span></a>
+        </p>
+        <p class="confirmation-buttons" style="display: flex; align-items: center;">
+            <span style="text-align: right"> You can gift another Tribals+ membership to a friend </span>
+            <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="popup.page = 'Gifting'" class="btn btn-tribals btn-gift">
+                    <span aria-hidden="true">🎁</span> Gift again?
+                <b v-if="!waitingForPayment">
+                </b>
+                <b v-if="waitingForPayment">
+                    Redirecting...
+                </b>
+            </button>
+            <button v-on:click="closePopup(); popup.page === 'None'" class="btn btn-primary">
+                <span aria-hidden="true">✅ Okay thanks!</span>
+            </button>
+
+        </p>
+     </div>
+</div>

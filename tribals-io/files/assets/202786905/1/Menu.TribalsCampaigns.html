@@ -1,0 +1,36 @@
+<a id="tribals-plus-subs"
+   class="campaign-banner"
+   v-on:click="tribalsPlusCTA(campaign.slug)" 
+   :target="isPoki ? '_blank' : ''" 
+   v-if="profile.active && !tribalsPlus && campaign && campaign.slug && campaign.type === 'plus_normal'" 
+   :style="{ background: campaign.bg_color }">
+   
+   <h1 v-html="campaign.title"></h1>
+   <img :src="campaign.image">
+   <h3 v-html="campaign.description"></h3>
+   <p v-html="campaign.subtext"></p>
+</a>
+<a id="OTP-payment-banner"
+   class="campaign-banner"
+   v-on:click="campaignCTA(campaign.type, campaign.slug)" 
+   :target="isPoki ? '_blank' : ''" 
+   v-if="profile.active && !tribalsPlus && campaign && campaign.slug && campaign.type === 'gifting'" 
+   :style="{ background: campaign.bg_color }">
+   
+   <h1 v-html="campaign.title"></h1>
+   <img :src="campaign.image">
+   <h3 v-html="campaign.description"></h3>
+   <p v-html="campaign.subtext"></p>
+</a>
+<a id="OTP-payment-banner"
+   class="campaign-banner"
+   v-on:click="campaignCTA(campaign.type, campaign.slug)" 
+   :target="isPoki ? '_blank' : ''" 
+   v-if="profile.active && !tribalsPlus && campaign && campaign.slug && campaign.type === 'server'" 
+   :style="{ background: campaign.bg_color }">
+   
+   <h1 v-html="campaign.title"></h1>
+   <img :src="campaign.image">
+   <h3 v-html="campaign.description"></h3>
+   <p v-html="campaign.subtext"></p>
+</a>

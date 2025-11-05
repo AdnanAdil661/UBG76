@@ -1,0 +1,1087 @@
+<div id="vuejs-wrapper">
+   
+    <!--VueJS wrapper is for items that doesnt affected by zoom-->
+    <div id="big-info-message" v-if="bigInfoMessage.active" class="big-info-message">
+        <p>{{bigInfoMessage.text}}</p>
+    </div>
+
+    <div id="tooltip" v-if="tooltip.active && showInventory" :style="getTooltipPosition()">
+        <span v-if="tooltip.item">
+            <h2>{{tooltip.item.label}}</h2>
+            <p>{{tooltip.item.description}}</p>
+
+            <!-- Durability -->
+            <span v-if="tooltip.item.durability > 0 && tooltip.item.maxDurability > 0">
+                <h3>Durability</h3>
+                <p>Durability : <b class="damage">{{tooltip.item.durability}}/{{tooltip.item.maxDurability}}</b></p>
+            </span>
+
+            <!--Damage info-->
+            <span v-if="tooltip.item.animalDamage">
+                <h3>Damages</h3>
+                <p>Animal : <b class="damage">+{{tooltip.item.animalDamage}}</b></p>
+                <p>Player : <b class="damage">+{{tooltip.item.playerDamage}}</b></p>
+                <p>Building : <b class="damage">+{{tooltip.item.buildingDamage}}</b></p>
+            </span>
+
+            <!--Books-->
+            <span v-if="tooltip.item.uses > 0">
+                <h3>Book Condition</h3>
+                <p>Usage : <b class="damage">{{tooltip.item.uses}} / {{tooltip.item.usesBeforeWorn}}</b></p>
+                <p>Chance to wear out : {{tooltip.item.wornChance}}%</p>
+            </span>
+        </span>
+    </div>
+
+    <!--wrapper affected by zoom changes-->
+    <div id="wrapper" class="wrapper" v-show="!overlaySettings.disableUI">
+        <div 
+            id="drop-area" 
+            v-if="!isSleeping"
+            :class="{'active' : showGeneralMap || showInventory, 'dragging' : isDragging}"
+            v-on:drop="onDropArea($event)"
+            v-on:dragover="allowDrop($event)"
+            v-on:mouseover="onDragEnter($event)"
+            v-on:click="lockMouse()">
+        </div>
+
+        <div v-if="popup.active" class="shadow" v-on:click="closePopup()"></div>
+        @import "Subscription.Popup.html"
+        @import "Subscription.Gifting.html"
+
+        <link rel="stylesheet" :href="getImage('hint.min.css')">
+
+        <div id="transition" :class="{'active' : transition.active}" v-if="transition.hidden"></div>
+
+        <div id="connecting" v-if="connection.state != 'Connected' || transition.active">
+            <img class="logo" src="https://tribals.io/images/Tribals-Logo.png">
+
+            <div id="loading-images">
+                <img v-for="image in loadingImages" :src="getImage(image)">
+            </div>
+            
+
+            <!--
+            <div class="tutorial-images" v-if="connection.state == 'Waiting' || connection.state == 'Connected'">
+                <div class="tutorial-box" v-for="item in loadingHints">
+                    <div class="img-box">
+                        <img :src="getImage(item.img)">
+                    </div>
+                
+                <div class="tutorial-text">
+                    <p> {{item.text}} </p>
+                </div>
+                </div>
+            </div>
+            -->
+
+            <div class="loading-bar">
+                <div class="fill" :style="{'width' : assets.loaded * 100 / assets.count + '%'}"></div>
+                <h3>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                    {{assets.loading}}
+                </h3>
+            </div>
+            <p>{{connection.state + ' / ' + connection.URL}}</p>
+        </div>
+
+        <div v-if="showInventory" id="pause-menu">
+            <ul>
+                <li v-on:click="goMenu()" class="leave"><i class="fa fa-sign-out" aria-hidden="true"></i><span>{{translate('Leave')}}</span></li>
+                <li v-on:click="callSettingsScene(), isPaused = false"><i class="fa fa-cog" aria-hidden="true"></i> </li>
+            </ul>
+        
+            <div class="invite-link">
+                <div class="link-box">
+                    <input id="invite-link-input"
+                        v-model="inviteLink"
+                        type="text" 
+                        readonly="true">
+                    <span class="server-name" v-if="serverName && !overlaySettings.streamerMode">{{ serverName }}</span>
+                    <button v-on:click="copyToClipboard('#invite-link-input')" :data-tooltip="translate('Click to copy the server link!')"> <span v-if="!copyResult"><i class="fa fa-clone" aria-hidden="true"></i></span> <span v-if="copyResult"><i class="fa fa-check-circle" aria-hidden="true"></i></span> Invite Friends </button>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="networkError" id="connection-error">
+            <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{networkError}}</p>
+            <button v-on:click="goMenu()"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{translate('Go Menu')}}</button>
+            <button v-on:click="retryConnection()" :disabled="network.countDown > 0">
+                <i class="fa fa-refresh" aria-hidden="true"></i> {{translate('Retry')}}  <span v-if="network.countDown > 0">in {{network.countDown}}s</span>
+            </button>
+        </div>
+
+        <div id="announcement" :class="{'show' : announcement.active}" v-if="announcement.active && !showInventory" class="announcement-text gameplay-element" @click="hide">
+            <img :src="getImage(announcement.icon)">
+            <p>{{announcement.message}}</p>
+            <span>{{announcement.altMessage}}</span>
+        </div>
+
+        <div id="online-count" :class="{'streamer-mode' : overlaySettings.streamerMode}" v-if="!showInventory && !showGeneralMap" class="gameplay-element">
+            <p v-if="!overlaySettings.streamerMode">{{onlineCount}} {{translate('Online')}}</p>
+            <span class="time">
+                {{time}}
+            </span>
+        </div>
+
+        <div id="chat" :class="{'active': showChat, 'poki-class': isPoki}" v-if="!overlaySettings.hideChat && !isMobile && !showInventory" v-on:click="isFocused = true;">
+            <div id="messages-wrapper" :class="{'chat-disactive' : !isFocused}" v-if="!isPoki">
+
+                <div class="mobile-chat" v-on:click="toggleChat()">
+                    <i class="fa" :class="{'fa-commenting' : !showChat, 'fa-angle-left' : showChat}" aria-hidden="true"></i>
+                </div>
+                <div id="messages">
+                    <li 
+                        v-for="message in filteredMessages" 
+                        :class="[
+                            {
+                                'global': message.chatMode == 'Global', 
+                                'clan': message.chatMode == 'Clan', 
+                                'party': message.chatMode == 'Party', 
+                                'whisper': message.chatMode.startsWith('W_'), 
+                                'tribalsPlus': message.tribalsPlus === true,
+                                'Notifs': message.username == 'Notifs',
+                                'staff': message.clan == 'STAFF' || message.username == 'meta', 
+                                'console': message.username == 'Console' || message.username == 'Server' || message.username == 'Party', 
+                                'ignored': checkNameIgnore(message.rawUsername)
+                            },
+                            usernameColorClass(message.usernameColor, message.clan, message.rawUsername)
+                        ]">
+
+                        <a v-if="message.username != 'Console' && message.username != 'Server' && message.username != 'Party'" href="javascript:;" v-on:click="report(message.rawUsername, 'chat')" class="report-button"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></a>
+                        <a v-if="message.username != 'Console' && message.username != 'Server' && message.username != 'Party'" href="javascript:;" tooltip="Ignore this player" v-on:click="ignorePlayer(message.rawUsername)" class="report-button" style="color: #f33a3a"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+
+                        <span v-if="chatMode.startsWith('W_')" style="color: #c150df !important">[WHISPER] </span>
+                        <span v-else-if="chatMode && !chatMode.startsWith('W_') && !isAnnouncement(message.username)" v-on:click="setChatMode(message.chatMode)" :style="{ color: message.chatMode === 'Global' ? '#000000c7' : '' }">[{{ message.chatMode }}] </span>
+                        <span v-if="isAnnouncement(message.username)" class="consoleSpan">[{{message.username}}] </span>
+
+                        <span v-if="message.clan" :style="{ color: message.clan === 'STAFF' ? 'red' : 'white' }">[{{ message.clan }}] </span>
+                        <a v-if="message.tribalsPlus" class="hint--top hint--no-animate tribalsPlus-icon" v-on:click="showTribalsPlus('chat_emoji_click');" aria-label="Tribals+ Emoji!">{{ message.selectedEmoji }}</a>
+
+                        <span v-if="message.rawUsername" v-on:click="copyTextToClipboard(message.rawUsername, 'Username')"><b>{{message.rawUsername}}</b>: </span>
+                        <span style="color: white !important" v-if="isAnnouncement(message.username)">{{message.message}}</span>
+                        <span v-else v-on:click="copyTextToClipboard(message.message, 'Message')">{{message.message}}</span>
+                    </li>
+                </div>  
+            </div>
+
+            <div id="emoji-selection" v-if="emojis.length > 0">
+                <li :class="{'active' : emojiIndex == index}" v-for="(emoji, index) in emojis"><span class="icon">{{emoji.emoji}}</span> <span class="code">:{{emoji.keywords[0]}}:</span></li>
+            </div>
+
+            <div 
+                id="chat-disabled"
+                class="chat-disabled"
+                v-if="isGuest && !watchedAdChat && !isTutorialMode && !disableADS"
+                v-on:click="checkGuestStatus()"
+            >
+                <div class="chat-info">
+                    <div class="flex-grow-center">
+                        <span class="chat-disabled-text">CHAT DISABLED</span>
+                    </div>
+                    <span class="watched-total">{{ watchedTotal }}/2</span>
+                </div>
+                <span>CLICK HERE TO 🎬 OR SIGN IN TO UNLOCK THE CHAT</span>
+            </div>
+
+            <input 
+                id="chat-message"
+                v-if="!isGuest || watchedAdChat || isTutorialMode || disableADS"
+                v-on:keyup.38="emojiIndex > 0 ? emojiIndex-- : emojiIndex"
+                v-on:keyup.40="emojiIndex < emojis.length - 1 ? emojiIndex++ : emojiIndex"
+                v-on:click="focusChat()"
+                v-model="message"
+                autocomplete="off"
+                type="text" 
+                :placeholder="chatPlaceholder"
+            />
+            <div class="typing">
+                <div class="chat-buttons-wrapper">
+                    <div class="chat-buttons">
+                        
+                        <template v-for="mode in chatModes">
+                            <button :class="{ active: chatMode === mode.name }" v-on:click="setChatMode(mode.name)">
+                                {{ mode.displayName }}
+                                <span class="close-chatMode" v-on:click.stop="closeChatMode(mode.name)">X</span>
+                                <span 
+                                    class="notification" 
+                                    v-if="findUnseenMessages(mode.name).length > 0 && chatMode !== mode.name">
+                                    {{ findUnseenMessages(mode.name).length > 9 ? '9+' : findUnseenMessages(mode.name).length }}
+                                </span>
+                            </button>
+                        </template>
+
+                        <span v-if="Object.keys(visibleWhispers).length > 0">|</span>
+
+                        <div class="chat-button-group">
+                            <button v-for="whisper in whisperModes" :key="whisper.room" :class="{ active: chatMode === whisper.room }" v-on:click="setChatMode(whisper.room)" class="chat-button">
+                                <span v-on:click.stop="setChatMode(whisper.room)">
+                                    {{ whisper.mode }}
+                                </span>
+                                <span class="close-chatMode" v-on:click.stop="closeChatMode(whisper.room)">X</span>
+                                <span class="notification" v-if="findUnseenMessages(whisper.room).length > 0 && chatMode !== whisper.room">
+                                    {{ findUnseenMessages(whisper.room).length > 9 ? '9+' : findUnseenMessages(whisper.room).length }}
+                                </span>
+                            </button>
+                            <button class="far-Right" v-if="Object.keys(hiddenWhispers).length > 0" v-on:click="openMoreChats()">
+                                ...
+                                <span class="notification" v-if="totalUnseen && totalUnseen > 0">
+                                    {{ totalUnseen > 9 ? '9+' : totalUnseen }}
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- <span v-if="typing.people > 0"><i class="fa fa-pencil" aria-hidden="true"></i> {{typing.people}} {{translate('people typing')}}...</span> -->
+            </div>
+            <!-- Popup for additional chats -->
+            <div v-if="showMoreChats" class="popupWhisper">
+                <button v-for="(messages, room) in hiddenWhispers" :key="room" :class="{ active: chatMode === room }" v-on:click="setChatMode(room)">
+                    <span v-on:click.stop="setChatMode(room)">
+                        {{ checkWhisperMode(room) }}
+                    </span>
+                    <span class="close-chatMode" v-on:click.stop="closeChatMode(room)">X</span>
+                    <span class="notification" v-if="findUnseenMessages(room).length > 0 && chatMode !== room">
+                        {{ findUnseenMessages(room).length > 9 ? '9+' : findUnseenMessages(room).length }}
+                    </span>
+                </button>
+            </div>
+            <div v-if="isPoki" class="play-on-tribals">
+                <a :href="inviteLink" v-on:click="redirectChatButton();" target="_blank">
+                    {{translate("You can't use the chat in Poki for now!")}}
+                    <br>
+                    {{translate("Click here if you want to chat!")}}
+                </a>
+            </div>
+        </div>
+
+        <div id="mini-map" class="hud-map gameplay-element" v-if="!isDeath && !isSleeping && !showInventory && !showGeneralMap && !isMobile && !overlaySettings.streamerMode && !isTutorialMode">
+            <div
+                v-if="(!overlaySettings.streamerMode && pin.isMine) || (!overlaySettings.streamerMode && !pin.isMine) || (overlaySettings.streamerMode && !pin.isMine)"
+                v-for="pin in pins"
+                class="map-pin"
+                :style="{
+                'left' : '' + limit(player.position.x - pin.x + testOffsetX, 0, 250) + 'px',
+                'top' : '' +  limit(player.position.y - pin.y + testOffsetY, 0, 200) + 'px',
+                }"
+            >
+                <img :src="getImage(pin.icon)">
+            </div>
+            <span class="overflow">
+                <div class="map-holder" :style="{
+                'left' : player.position.x + 'px',
+                'top' : player.position.y + 'px'
+                }">
+                    <img :src="getImage('Island-0x0-Map.jpg')">
+                </div>
+                <span class="player" :style="{'transform' : 'translate(-50%, -50%) rotate(' + -(angle - 270) + 'deg)'}"></span>
+            </span>
+            <span class="inspect">[M] Map</span>
+        </div>
+
+        <div id="fpsCounter" class="gameplay-element">
+        </div>
+
+        <div id="top-left" class="gameplay-element">
+            <div id="task-message" v-if="task.message && !isDeath && !isSleeping">
+                <img :src="getImage(task.icon)">
+                <p v-html="task.message"></p>
+            </div>
+            <!--<div v-if="member.networkId != networkId" v-for="member in party.members" class="party-member">
+                <span class="username">{{member.username}}</span>
+                <span class="health-bar">
+                    <span class="fill" :style="{'width' : member.health + '%'}"></span>
+                </span>
+            </div>-->
+            <div v-if="party.request" class="party-invite">
+                <img :src="getImage('PartyInvite-Icon.png')">
+                <span>{{party.inviterName}} / {{translate('Accept')}}: <b class="key attention-small">[Y]</b> / <b class="key attention-small">[N]</b></span>
+            </div>
+        </div>
+
+        <!--<div id="compass" v-if="!isDeath && !isSleeping" class="gameplay-element">
+            <div id="compass-inside" :style="{'left' : (player.direction % 360 - 360) * 4.0 + 'px'}">
+                <li><span></span>N</li>
+                <li><span></span>E</li>
+                <li><span></span>S</li>
+                <li><span></span>W</li>
+                <li><span></span>N</li>
+                <li><span></span>E</li>
+                <li><span></span>S</li>
+                <li><span></span>W</li>
+                <li><span></span>N</li>
+                <li><span></span>E</li>
+                <li><span></span>S</li>
+                <li><span></span>W</li>
+            </div>
+        </div>-->
+        
+
+        <div id="quests" v-if="!showInventory && !isPaused && !showGeneralMap">
+            <!-- tutorial changes
+            <div class="mobile-quest"  v-on:click="toggleQuests()">
+                <i class="fa" :class="{'fa-info-circle' : !showQuests, 'fa-angle-left' : showQuests}" aria-hidden="true"></i>
+            </div>
+            -->
+
+            <li v-for="quest in quests" :class="{'completed' : quest.completed}">
+                <div class="bar"><div class="fill" :style="{'width' : quest.progress + '%'}"></div></div>
+                <div class="quest-display">
+                    <img :src="getImage(quest.icon)">
+                    {{quest.name}}
+                    <small v-if="quest.state">{{quest.state}}</small>
+                </div>
+            </li>
+        </div>
+
+        <div id="suffer-overlay" v-if="stats.hunger < 20 || stats.thirst < 20 || suffering.length > 0" :class="suffering.join(' ')">
+
+        </div>
+
+        <div id="sleeping" v-if="isSleeping">
+            <div id="reward-banner" v-on:click="rewardCraft(reward)" v-if="reward.active && !disableADS">
+                <h3>{{reward.name}}</h3>
+                <img :src="getImage(reward.icon)">
+                <button>🎬 GET IT FREE</button>
+            </div>
+
+            <button class="skip-button" v-if="!isWakingUp && isTutorialMode" v-on:click="isWakingUp = true, isRespawnRequested = false, skipTutorial()">
+                <i class="fa fa-fast-forward" aria-hidden="true"></i> Skip Tutorial
+            </button>
+            <button :disabled="isWakingUp" class="wake-up-button" v-on:click="isWakingUp = true, wakeUp()">
+                <div v-if="isWakingUp" class="loader loader-center"></div>
+                <span v-if="!isWakingUp">
+                    <img :src="getImage('WakeUp-Icon.png')">
+                    {{translate('Wake Up')}}
+                </span>
+            </button>
+
+            <div id="sleeping-banner"></div>
+        </div>
+
+        <div v-if="clan.active" id="clan-details">
+            <div v-on:click="hideClan()" class="close-button"></div>
+
+            <div class="form-field" v-show="clan.loading">
+                <div class="loader loader-center"></div>
+            </div>
+
+            <div class="clan-header">
+                <logo class="logo" :clan="clan"></logo>
+                <h1><span class="slug">[{{clan.slug}}]</span> {{clan.name}}</h1>
+                <p><i class="fa fa-user" aria-hidden="true"></i> {{clan.owner}} (Owner)</p>
+                <p><i class="fa fa-users" aria-hidden="true"></i> {{translate('Members')}}: {{clan.members}} people</p>
+
+                <a v-if="clan.discord" class="discord-link" target="_blank" :href="clan.discord"><i class="fab fa-discord"></i> Discord</a>
+            </div>
+
+            <button v-if="!clan.is_member" class="form-button" v-on:click="sendJoinRequest()"> {{translate('Join')}} <i class="fa fa-user-plus" aria-hidden="true"></i></button>
+            <button v-if="clan.is_member" class="form-button" v-on:click="goClanDashboard(), isPaused = false"> {{translate('Hub')}} <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+        </div>
+
+        <div id="microphone" v-if="isTalking && !isPoki" class="information-text gameplay-element">
+            <img :src="getImage('Microphone-Icon.png')">  {{translate('Talking')}}...
+        </div>
+
+        <div id="info-message" v-if="!isSleeping && infoMessage.active && !codePrompt.active && !prompt.active" class="information-text gameplay-element" @click="hide">
+            <img v-if="infoMessage.icon" :src="getImage(infoMessage.icon)"> {{infoMessage.message}}
+        </div>
+
+        <div id="info-message" v-if="!isSleeping && upgradeNeeds.active && !codePrompt.active && !prompt.active" class="information-text gameplay-element" @click="hide">
+            <img :src="getImage(upgradeNeeds.icon)"> {{translate('You need')}} "{{upgradeNeeds.name}}" <small>{{upgradeNeeds.stack}}x</small>
+        </div>
+
+        <div id="guide" v-if="guide.length > 0 && !selection.active && !isDeath && !isSleeping && !showInventory" class="gameplay-element">
+            <span class="guide" v-for="item in guide">
+                <img :src="getImage(item.icon)">
+                <b>{{item.text}}</b>
+            </span>
+        </div>
+
+        <div class="prompt-bg" v-if="prompt.active && !isDeath && !isSleeping"></div>
+
+        <div id="prompt" v-if="prompt.active && !isDeath && !isSleeping" class="prompt-text prompt-rename gameplay-element">
+            <div v-on:click="hidePrompt()" class="close-button"></div>
+
+            <div class="prompt-head"> 
+                <h4> 
+                    <img v-if="prompt.icon" :src="getImage(prompt.icon)"> 
+                    {{prompt.title}}
+                </h4>
+            </div>
+            
+
+            <div id="prompt-form" class="form-box">
+                <input 
+                id="prompt-input"
+                v-on:focus="isFocused = true" v-on:blur="isFocused = false"
+                v-model="prompt.message"
+                type="text" 
+                :placeholder="prompt.title">
+            </div>
+        
+            <button class="form-button" v-on:click="setPrompt()">{{translate('Okay')}}</button>
+        </div>
+
+        <div id="prompt" v-if="codePrompt.active && !isDeath && !isSleeping" class="prompt-text prompt-password gameplay-element" :class="{'tutorial-prompt': isTutorialMode}">
+            <div v-on:click="hideCodePrompt()" class="close-button"></div>
+
+            <div class="prompt-head"> 
+                <img v-if="codePrompt.icon" :src="getImage(codePrompt.icon)"> 
+                <p>{{codePrompt.title}}  <filter-password v-if="codePrompt.code" name="code-prompt" :data="codePrompt.code"></filter-password></p>
+            </div>
+
+            <div id="prompt-form" class="form-box">
+                <form action="javascript:;" autocomplete="off">
+                     <input 
+                        id="prompt-input"
+                        class="prompt-pass-input"
+                        v-on:focus="isFocused = true" v-on:blur="isFocused = false"
+                        v-model="codePrompt.message"
+                        type="text" 
+                        maxlength="4"
+                        min="0000"
+                        max="9999"
+                        v-on:input="validateCodeInput()"
+                        placeholder="Enter the password" />
+                </form>
+               
+            </div>
+        
+            <button class="form-button" v-on:click="setCodePrompt()">{{translate('Okay')}}</button>
+        </div>
+
+        <div id="note-display" v-if="note.active">
+            <div class="popup-area">
+                <div v-on:click="closeNote()" class="close-button"></div>
+                <textarea v-model="note.note"></textarea>
+            </div>
+        </div>
+        
+
+        <div id="password-locker" v-if="isRequestingPassword" class="gameplay-element">
+            <div id="password-popup">
+                <div v-on:click="closePassword()" class="close-button"></div>
+                <h4>{{passwordText}}</h4>
+                <div class="password-slot" :class="{'active' : passwordIndex === 0}">
+                    <div class="glass"></div>
+                    <div class="holder" :style="{'top' : -(password[0] * 150 - 50) + 'px'}">
+                        <li v-for="number in numbers">{{number}}</li>
+                    </div>
+                </div>
+                <div class="password-slot" :class="{'active' : passwordIndex === 1}">
+                    <div class="glass"></div>
+                    <div class="holder" :style="{'top' : -(password[1] * 150 - 50) + 'px'}">
+                        <li v-for="number in numbers">{{number}}</li>
+                    </div>
+                </div>
+                <div class="password-slot" :class="{'active' : passwordIndex === 2}">
+                    <div class="glass"></div>
+                    <div class="holder" :style="{'top' : -(password[2] * 150 - 50) + 'px'}">
+                        <li v-for="number in numbers">{{number}}</li>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="death" v-if="isDeath || isTransfer" :class="{'darker' : death.canSpawn || isTransfer }">
+            <a v-if="death.username" href="javascript:;" v-on:click="report(death.username, 'kill')" class="full-report-button">Report <i class="fa fa-exclamation-circle" aria-hidden="true"></i></a>
+
+            <div id="death-header" v-if="isDeath">        
+                <p> <img :src="getImage('Skull-Pin.png')">  <b>{{translate('Dead')}}:</b> {{death.text}}</p>
+            </div>
+            
+            <!-- v-if="death.canSpawn"-->
+            <div id="death-context-later" v-if="death.canSpawn">
+
+                <div class="death-map-wrapper">
+                    <div class="map-box">
+                        <div id="mini-map">
+
+                            <div class="region-glow-red"
+                                style="left: 70px;top: 15px;"
+                                v-on:click="respawnCommercialBreak({ type: 'region', area: 'red'})"
+                                :highlight="'region-red'"
+                                v-on:mouseover="setHighlight('region-red')"
+                                v-on:mouseleave="removeHighlight()"     
+                            ></div>
+                            <div class="region-glow-blue" style="left: 180px;top: 190px;"
+                                v-on:click="respawnCommercialBreak({ type: 'region', area: 'blue'})"
+                                :highlight="'region-blue'"
+                                v-on:mouseover="setHighlight('region-blue')"
+                                v-on:mouseleave="removeHighlight()"     
+                            ></div>
+                            <div class="region-glow-yellow" style="left: 310px;top: 5px;"
+                                v-on:click="respawnCommercialBreak({ type: 'region', area: 'yellow'})"
+                                :highlight="'region-yellow'"
+                                v-on:mouseover="setHighlight('region-yellow')"
+                                v-on:mouseleave="removeHighlight()"     
+                            ></div>
+
+                            <div 
+                                v-for="(pin, index) in pins"
+                                v-if="pin.type !== 'shop'"
+                                class="map-pin"
+                                v-on:click="respawnCommercialBreak({ type: pin.type, id: pin.id , nextRespawn: pin.nextRespawn})"
+                                :highlight="'highlight-' + index"
+                                v-on:mouseover="setHighlight('highlight-' + index)"
+                                v-on:mouseleave="removeHighlight()"
+                                :style="{
+                                'left' : (!isMobile ? (testOffset - 5) - (pin.x) * (testScale - 0.10) : ((testOffset - 5) - (pin.x) * (testScale - 0.10)) / 2) + 'px',
+                                'top' :  (!isMobile ? (testOffset - 6) - (pin.y) * (testScale - 0.15) : ((testOffset - 6) - (pin.y) * (testScale - 0.15)) / 2) + 'px',
+                                'opacity': pin.type === 'bed' || index === pins.length - 1 ? '1' : '0.5'
+                                }"
+                            >
+                                <img :src="getImage(pin.icon)">
+
+                                <div class="pin-timer" v-if="pin.nextRespawn">
+                                    {{pin.nextRespawn}}
+                                </div>
+                            </div>
+
+                            <span class="overflow">
+                                <div class="map-holder">
+                                    <img :src="getImage('Island-0x0-Map.jpg')">
+                                </div>
+                                <!--<span class="player" :style="{'transform' : 'translate(-50%, -50%) rotate(' + -(angle - 270) + 'deg)'}"></span>-->
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="map-detail-box">
+                        <h1> Spawn Points </h1>
+                        <ul>
+                            <li v-for="(pin, index) in pins"
+                                v-if="pin.type == 'bed' && pin.nextRespawn < 1"
+                                class="map-detail"
+                                :class="pin.type"
+                                :highlight="'highlight-' + index"
+                                v-on:click="respawnCommercialBreak({ type: pin.type, id: pin.id , nextRespawn: pin.nextRespawn})"
+                                v-on:mouseover="setHighlight('highlight-' + index)"
+                                v-on:mouseleave="removeHighlight()"
+                                >
+                                <img :src="getImage(pin.icon)">
+                                <div class="detail-head">
+                                    <!-- <p>{{pin.type}} <span>{{pin.owner}} </span> </p> -->
+                                    <p>
+                                        {{ pin.type }} <span>{{ pin.text }}</span>
+                                    </p>
+                                </div>
+                                
+                                <div class="detail-content"> 
+                                    <div class="pin-timer" v-if="pin.nextRespawn">
+                                        {{pin.nextRespawn}}'s
+                                    </div>
+
+                                    <div class="pin-button" v-if="!pin.nextRespawn">
+                                        Respawn 
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="map-detail"
+                                :highlight="'region-red'"
+                                style="border-left: solid 8px rgb(255 0 0) !important;"
+                                v-on:click="respawnCommercialBreak({ type: 'region', area: 'red' })"
+                                v-on:mouseover="setHighlight('region-red')"
+                                v-on:mouseleave="removeHighlight()"
+                                >
+                                <div class="detail-head" style="color: rgb(255 0 0) !important">
+                                    <p>THE RUINS </span> </p>
+                                </div>
+                                
+                                <div class="detail-content"> 
+                                    <div class="pin-button">
+                                        Respawn 
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="map-detail"
+                                :highlight="'region-blue'"
+                                style="border-left: solid 8px rgb(0 0 255) !important;"
+                                v-on:click="respawnCommercialBreak({ type: 'region', area: 'blue' })"
+                                v-on:mouseover="setHighlight('region-blue')"
+                                v-on:mouseleave="removeHighlight()"
+                                >
+                                <div class="detail-head" style="color: rgb(0 0 255) !important">
+                                    <p>ROCKY MOUNTAIN </span> </p>
+                                </div>
+                                
+                                <div class="detail-content"> 
+                                    <div class="pin-button">
+                                        Respawn 
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="map-detail"
+                                :highlight="'region-yellow'"
+                                style="border-left: solid 8px rgb(255 255 0) !important;"
+                                v-on:click="respawnCommercialBreak({ type: 'region', area: 'yellow' })"
+                                v-on:mouseover="setHighlight('region-yellow')"
+                                v-on:mouseleave="removeHighlight()"
+                                >
+                                <div class="detail-head" style="color: rgb(255 255 0) !important">
+                                    <p>OLD FOREST </span> </p>
+                                </div>
+                                
+                                <div class="detail-content"> 
+                                    <div class="pin-button">
+                                        Respawn 
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li v-for="(pin, index) in pins"
+                                v-if="pin.type == 'bed' && pin.nextRespawn > 0"
+                                class="map-detail"
+                                :class="pin.type"
+                                :highlight="'highlight-' + index"
+                                v-on:click="respawnCommercialBreak({ type: pin.type, id: pin.id , nextRespawn: pin.nextRespawn})"
+                                v-on:mouseover="setHighlight('highlight-' + index)"
+                                v-on:mouseleave="removeHighlight()"
+                                >
+                                <img :src="getImage(pin.icon)">
+                                <div class="detail-head">
+                                    <p>
+                                        {{ pin.type }} <span>{{ pin.text }}</span>
+                                    </p>
+                                </div>
+                                
+                                <div class="detail-content"> 
+                                    <div class="pin-timer" v-if="pin.nextRespawn">
+                                        {{pin.nextRespawn}}'s
+                                    </div>
+
+                                    <div class="pin-button" v-if="!pin.nextRespawn">
+                                        Respawn 
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                
+                <button v-on:click="respawnCommercialBreak()" class="wake-up-button spawn-attention">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> {{translate('Respawn')}}
+                </button>
+            </div>
+
+            <div id="death-counter" v-if="!death.canSpawn && !isTransfer">
+                <i class="fa fa-clock-o" aria-hidden="true"></i> {{translate('You can respawn in')}} <b>{{death.countDown}}s</b>.
+
+                <div class="bar">
+                    <div class="fill" :style="{ animation: 'fillBar ' + (tribalsPlus ? '5s' : '10s') + ' linear' }"></div>
+                </div>
+            </div>
+
+            <div v-if="tribalsPlus === false || !disableADS" id="death-banner"></div>
+        </div>
+
+        <!--
+        <div id="tutorial" v-if="!isSleeping && lastTutorialIndex < tutorials.length">
+            <video :src="getImage(tutorials[lastTutorialIndex].video)" autoplay loop muted></video>
+            <h1>{{tutorials[lastTutorialIndex].text}}</h1>
+        </div>
+        -->
+
+
+        <div id="error" v-if="errorMessage" class="gameplay-element" @click="hide">
+            <img :src="errorIcon"> {{errorMessage}}
+        </div>
+        <!--
+        <div class="information-text" v-if="!errorMessage && !selection.active && isBuilding && !isDeath">
+            <img :src="getImage('Right-Click.png')"> Press [B] to open menu.
+        </div>
+        -->
+
+        <div v-if="!showInventory" id="hitmarker"></div>
+
+        <div id="crosshair" v-if="!showInventory && !isDeath && !isSleeping && !isAiming" 
+            :class="{'walking' : isWalking}" 
+            :style="{'transform' : 'translate(-50%, -50%)'}">
+
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </div>
+
+        <div id="crosshair-aim" v-if="needsAimAssist() && ((!showInventory && !isDeath && isAiming) || interaction.active)"></div>
+
+        <div id="building-bar" :class="{'active' : isPlacing}">
+            <span class="fill"></span>
+        </div>
+        <div id="item-notifications" v-if="!showInventory">
+            <li :class="{'add' : item.state == 'add', 'remove' : item.state == 'remove'}" v-for="item in itemNotifications">
+                <img :src="getImage(item.name + '-Icon.png')">
+                <b class="amount">{{item.state == 'add' ? '+' : '-'}}{{item.stack}}</b>
+                <span class="total" v-if="item.total"><b>({{item.total}})</b></span>
+                {{item.name}}
+            </li>
+        </div>
+        
+        <div id="interact" v-on:click="interactAction()" v-if="interaction.active && !showInventory && !isDeath && !isSleeping && !isBuilding">
+            <div class="interact-relative">
+                <!--
+                <span id="can-take" v-show="interaction.canInteract"><i class="fa fa-hand-lizard-o" aria-hidden="true"></i></span>
+                <span id="action-key" v-show="interaction.canInteract" class="keyboard attention-small">F</span>
+                -->
+                
+                {{interaction.name}}
+
+                <small v-if="interaction.partName">
+                    {{interaction.partName}}
+                </small>
+
+                <span class="extra-messages" v-if="interaction.error">{{interaction.error}}</span>
+                <span id="building-durability">
+                    <span
+                        id="building-fill"
+                        class="fill" 
+                        :style="{'width' : interaction.durability + '%'}"
+                    ></span>
+                </span>
+                <span class="stats" v-if="interaction.stats">{{interaction.stats}}</span>
+                <div class="action-keys">
+                    <div class="action-keys-relative">
+                        <span id="action-key" v-show="!isMobile && !showInventory && interaction && interaction.active && interaction.canInteract" class="keyboard attention-small">{{keybinds['F']}}</span>
+                        <span id="action-key-c" v-show="!showInventory && interaction && interaction.active && interaction.canInteract && interaction.icon === 'SleepingBed-Icon.png' && interaction.durability > 0" class="keyboard attention-small">C</span>
+                    </div>
+                    
+                </div>
+                
+                <div id="action-key-mobile" v-show="isMobile && !showInventory && interaction && interaction.active && interaction.canInteract" class="attention-small"> <img :src="getImage('Collect-Icon.png')"> </div>
+                
+                <!--Party-->
+                <span id="action-key-party" v-if="!showInventory && interaction && interaction.active && !interaction.icon && !interaction.canInteract && !interaction.partName && checkPartyStatus(interaction.name) && party.active && party.owner" class="keyboard attention-small">{{keybinds['F']}} <img :src="getImage('PartyInvite-Icon.png')"></span>
+            </div>
+        </div>
+
+
+        <div v-if="!isDeath && !isSleeping && repairProgress.status" class="repair-progress-bar">
+            <i class="fa fa-clock-o" aria-hidden="true"></i> {{translate('You are repairing')}} <b>{{repairProgress.countDown}}s</b>.
+            <div class="bar">
+                <div class="fill"></div>
+            </div>
+            
+        </div>
+
+        <div class="column-wrap menu-align">
+            <div id="shortcuts" v-if="!isDeath && !isSleeping && !showInventory">
+                <div class="repair-item" v-if="canRepair" v-on:click="onMobileAction('KEY_R')">
+                    <div class="repair-item-list">
+                        <b v-for="item in canRepair">
+                            <img :src="getImage(item.icon)">
+                            <small>{{item.stack}}x</small>
+                        </b>
+                    </div>
+                    <span class="attention-small">
+                        <b>[R]</b>
+                        <img :src="getImage('Break-Icon.png')">
+                    </span>
+                </div>
+
+                <span v-if="isTutorialMode">
+                    <b>[G] Skip-Tutorial</b>
+                </span>
+                <span v-if="isTutorialMode">
+                    <b>[F] Interact</b>
+                </span>
+                <span v-if="isTutorialMode">
+                    <b>[TAB] Open Inventory</b>
+                </span>
+                <span v-if="isTutorialMode">
+                    <b>[SHIFT] Toggle-Run</b>
+                </span>
+                <span v-if="isTutorialMode">
+                    <b>[Left-Click] Attack</b>
+                </span>
+                <span v-if="isTutorialMode && currentHand && currentHand.name === 'BuildingPlan'">
+                    <b>[Right-Click] Build Options</b>
+                </span>
+                <span v-if="!isMobile && !isPoki && !isTutorialMode">
+                    <b>[T]</b>
+                    <img :src="getImage('Microphone-Color-Icon.png')">
+                </span>
+
+                <!--<span>
+                    <b>[B]</b>
+                    <img :src="getImage('BuildingPlan-Icon.png')">
+                </span>-->
+                <!--<span v-on:click="toggleInventory()" class="hint--left hint--no-animate" aria-label="Inventory"> 
+                    <b>[TAB]</b>
+                    <img :src="getImage('Bag-Icon.png')">
+                </span>-->
+            </div>
+
+            <div class="info-icons-wrap">
+                <div v-if="item.active" class="info-icon attention-info-icon hint--left hint--no-animate" :class="item.color" v-for="item in status" :aria-label="item.name">
+                    <img :src="getImage(item.icon)">
+                </div>
+            </div>
+        </div>
+
+        
+        
+        <div id="stats" v-if="!isDeath">
+            <div id="health-bar" class="bar health">
+                <!--<img v-if="stats.health < 20" class="alert attention" :src="getImage('Alert-Icon.png')">-->
+                <div v-if="stats.health < 20" class="alert-shadow stats-attention"></div>
+                <img class="icon" :src="getImage('Health-icon.png')">
+                <div v-if="stats.health > 1" class="fill-health" :style="{'--progress' : stats.health + '%', '--hotv-progress' : stats.hotv + '%'}"></div>
+                <span class="text">{{stats.health}}</span>
+            </div>
+
+            <div class="bar hungry">
+                <!--<img v-if="stats.hunger < 20" class="alert attention" :src="getImage('Alert-Icon.png')">-->
+                <div v-if="stats.hunger < 20" class="alert-shadow stats-attention"></div>
+                <img class="icon" :src="getImage('Hungry-Icon.png')">
+                <div v-if="stats.hunger > 5" class="fill" :style="{'--progress' : stats.hunger + '%'}"></div>
+                <span class="text">{{stats.hunger}}</span>
+            </div>
+
+            <div class="bar water">
+                <!--<img v-if="stats.thirst < 20" class="alert attention" :src="getImage('Alert-Icon.png')">-->
+                <div v-if="stats.thirst < 20" class="alert-shadow stats-attention"></div>
+                <img class="icon" :src="getImage('Water-Icon.png')">
+                <div v-if="stats.thirst > 5" class="fill" :style="{'--progress' : stats.thirst + '%'}"></div>
+                <span class="text">{{stats.thirst}}</span>
+            </div>
+        </div>
+
+        <div id="inventory-screen" v-if="showInventory && !isDeath && !isSleeping">
+            @import "Overlay.Inventory.html"
+        </div>
+      
+        <div id="hand" class="inventory" v-if="!selection.active && !isDeath && !isSleeping && !showChat">
+            <slots 
+                v-if="isLoaded"
+                name="hand" 
+                type="Hand" 
+                :inventory="hand.slice(0, 5)" 
+                :states="states"
+            >
+            </slots>
+
+            <li v-if="isMobile" class="slot bag" v-on:click="onMobileAction('Inventory')">
+                <span class="stack-display">
+                    <b class="big">TAB</b>
+                </span>
+                <span><img :src="getImage('Bag-Icon.png')"></span>    
+            </li>
+
+            <div v-if="isTutorialMode && tutorialGuide && !isFirstSlots() && tutorialGuide.crafted && tutorialGuide.name && tutorialGuide.name.length > 1 && !showInventory" class="guide-message">
+                <p>Move the {{tutorialGuide.name}} to one of the first 5 slots so you can use it!</p>
+                <div v-if="!isMobile" class="green-arrow-bottom"></div>
+            </div>
+        </div>
+
+        <div id="mobile-controller" v-if="!isDeath && !isSleeping && !showChat && !isPaused">
+            <div 
+                id="mobile-left"
+                v-on:touchstart="joystickEvent('touchstart', $event)"
+                v-on:touchmove="joystickEvent('touchmove', $event)"
+                v-on:touchend="joystickEvent('touchend', $event)"
+            >
+                <div class="mobile-movement"
+                    :style="{'left': '20%', 'top': '50%'}">
+                    <div class="mobile-joystick"
+                        :style="{'marginLeft' : mobile.joystick.x + 'px', 'marginTop' : mobile.joystick.y + 'px'}"></div>
+                    <div class="sprint-indicator">SPRINT</div>
+                </div>
+            </div>
+        
+            <div
+                id="mobile-right"
+                v-on:touchstart="mobileCameraEvent('touchstart', $event)"
+                v-on:touchmove="mobileCameraEvent('touchmove', $event)"
+                v-on:touchend="mobileCameraEvent('touchend', $event)"
+            >
+            </div>
+        
+            <div v-if="!showInventory" 
+                id="mobile-hit" 
+                v-on:touchstart="mobileHit(true)"
+                v-on:touchend="mobileHit(false)"
+            ><img :src="getImage('Harvest-Icon.png')">
+            </div>
+        
+            <div
+                id="mobile-option" 
+                v-if="guide.length > 0 && !selection.active"
+                v-on:touchstart="mouseOption()"
+            ><i class="fa fa-align-justify" aria-hidden="true"></i>
+            </div>
+        
+            <div v-if="!showInventory" id="mobile-jump" v-on:touchstart="mobileJump()">
+                <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+            </div>
+        
+            <div v-if="!showInventory" id="mobile-pause" v-on:click="callSettingsScene(), isPaused = true">
+                <i class="fa fa-cog" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div 
+            id="wheel-selection" 
+            v-show="selection.active && !isDeath && !isSleeping" 
+            v-on:click="wheelSelectItem(); playSound('Show')" 
+            @contextmenu="wheelSelectItem()"
+        >
+            <div id="wheel-border"></div>
+            <div id="wheel">
+                <li 
+                    :class="{'active' : item == selection.current}"
+                    :style="{'transform' : 'rotate(' + index * (360 / selection.list.length) + 'deg)'}" 
+                    v-on:mouseover="wheelShowDetails(item); playSound('Hover')" 
+                    v-for="(item, index) in selection.list"
+                >
+                    <span 
+                        class="icon"
+                        :class="item.class"
+                        :style="{'transform' : 'rotate(-' + index * (360 / selection.list.length) + 'deg)'}" 
+                    ><img :src="getImage(item.icon)"></span>
+                    <div class="origin">
+                        <span 
+                            class="icon"
+                            :style="{'transform' : 'rotate(-' + index * (360 / selection.list.length) + 'deg)'}" 
+                        >
+                            <img :src="getImage(item.icon)">
+                        </span>
+                    </div>
+                </li>
+
+                <div id="wheel-center">
+                    <span v-if="selection.current">
+                        <h1>{{selection.current.name}}</h1>
+                        <p>{{selection.current.description}}</p>
+                        <span v-if="selection.current && selection.current.cost_items" class="wheel-cost" v-for="item in selection.current.cost_items">
+                            <img :src="getImage(item.icon)">
+                            <b>{{item.name}} <small>{{item.cost}}x</small></b>
+                        </span>
+                        <div v-if="selection.options && selection.options.showResources">
+                        <span class="wheel-have" v-if="hasItem('Wood')">{{translate('You have')}} {{hasItem('Wood').stack}} x {{translate('woods')}}.</span>
+                        <span class="wheel-have wheel-missing" v-if="!hasItem('Wood')"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{translate("You don't have wood!")}} </span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div id="general-map" :style="{ transform: generalMapTransform }" class="hud-map gameplay-element" v-if="showGeneralMap && !isDeath && !isSleeping && !showInventory">
+            <button v-if="scalable" v-on:click="changeMapScale()"> SCALE MAP </button>
+            <div class="map-box">
+                
+                <div id="mini-map" :style="{ overflow: miniMapOverflow }">
+                    <div 
+                        v-for="(pin, index) in pins"
+                        class="map-pin"
+                        :highlight="'highlight-' + index"
+                        v-on:mouseover="setHighlight('highlight-' + index)"
+                        v-on:mouseleave="removeHighlight()"
+                        v-on:click="scrollToDetail('highlight-' + index)"
+                        :style="{
+                        'left' : '' + (testOffset - 5) - (pin.x) * (testScale - 0.10) + 'px',
+                        'top' : '' +  (testOffset - 6) - (pin.y) * (testScale - 0.15) + 'px',
+                        }"
+                    >
+                        <img :src="getImage(pin.icon)">
+                    </div>
+                    
+                    <span class="overflow">
+                        <div class="map-holder">
+                            <img :src="getImage('Island-0x0-Map.jpg')">
+                        </div>
+                        <div class="player-holder" :style="{
+                            'left' : '' + (testOffset - 5) - player.position.x  * (testScale - 0.10) + 'px',
+                            'top' : '' + (testOffset - 6) -  player.position.y * (testScale - 0.13) + 'px'
+                            }">
+                            <span class="player" :style="{'transform' : 'translate(-50%, -50%) rotate(' + -(angle - 270) + 'deg)'}"></span>
+                        </div>
+                    
+                    </span>
+                </div>
+            </div>
+            <div class="map-detail-box">
+                <div v-on:click="closeMap()" class="close-button"></div>
+                <h1> Map Detail </h1>
+                <ul>
+                    <li v-for="(pin, index) in pins"
+                        class="map-detail"
+                        :class="pin.type"
+                        :highlight="'highlight-' + index"
+                        v-on:mouseover="setHighlight('highlight-' + index)"
+                        v-on:mouseleave="removeHighlight()"
+                        v-on:click="onPinClick(pin)"
+                        >
+                        <img v-if="!showItems" :src="getImage(pin.icon)">
+                        <div class="detail-head">
+                            <p :class="showItems ? 'slotFlex' : ''">
+                                <img v-if="showItems" :src="getImage(pin.icon)">
+                                <span v-if="!showItems">{{ capitalizeWords(pin.type) }}</span>
+                                <span v-if="selectedPin !== pin && pin.type !== 'bed'">{{ capitalizeWords(pin.owner) }} </span>
+                                <span v-else>{{ capitalizeWords(pin.text) }}</span>
+                                <span v-if="showItems && pin.shopName && pin.type != 'LOOT'" class="shop-name">Shop Name: [{{ capitalizeWords(pin.shopName) }}]</span>
+                                <button v-if="pin.type === 'LOOT' && showItems && selectedPin === pin && pin.available" style="margin-left: 20px; cursor: crosshair;" v-on:click="goLOOT(pin)">Teleport</button>
+                            </p>
+                            <!-- <p v-if="selectedPin !== pin && pin.type !== 'bed'">{{pin.type}} <span>{{pin.owner}} </span><span v-else>{{ pin.text }}</span></p> -->
+                            <i v-if="selectedPin != pin && pin.available && !tribalsPlus" class="fa fa-film" style="color: #e9c619;vertical-align: middle;font-size: 24px;"></i>
+                            <div v-if="showItems && selectedPin === pin && pin.available" class="pin-items show">
+                                <div class="listing-table-pin">
+                                    <table>
+                                        <tr>
+                                            <th>{{translate('Icon')}}</th>
+                                            <th>{{translate('Selling')}}</th>
+                                            <th v-if="pin.type != 'LOOT'">{{translate('Price')}}</th>
+                                        </tr>
+                                        <tbody>
+                                            <tr v-for="(item, itemIndex) in pin.available" :key="itemIndex">
+                                                <td class="vendingmachine-header">
+                                                    <img :class="{'broken-icon' : item.isBroken}" class="vendingmachine-icon" :src="getImage(item.icon)">
+                                                    <span class="broken broken-map" v-if="item.isBroken"></span>
+                                                    
+                                                    <div class="durability durability-max" v-if="item.maxDurability >= 0 && item.durability >= 0 && item.durabilityPercentage >= 0 && !item.isBroken">
+                                                        <span class="fill" :style="{ 'width' : item.durabilityPercentage + '%' }"></span>
+                                                        <span class="lostDurability" :style="{'width' : item.lostDurabilityPercentage + '%', 'left' : 100-item.lostDurabilityPercentage + '%'}"></span>
+                                                    </div>
+                                                </td>
+                                                <td>{{item.name}} <small>({{item.stack}}x)</small></td>
+                                                <td v-if="pin.type != 'LOOT'"><span v-html="formatCraftRecipe(item.price)"></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-content"> 
+                            <div class="pin-timer-toolbox" 
+                                 :class="{'text-red': isProtectionZero(pin.protectionTime), 'text-green': !isProtectionZero(pin.protectionTime)}"
+                                 v-if="pin.protectionTime">
+                                {{pin.protectionTime}}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!--<div class="portrait-control">
+            <div class="logo-wrap">
+                <a href="/">
+                    <img :src="getImage('Tribals-Logo.png')">
+                </a>
+            </div>
+            <p>{{translate('Please rotate your device')}}</p>
+        </div>
+        -->
+    </div>
+</div>

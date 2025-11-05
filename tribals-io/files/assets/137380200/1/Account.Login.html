@@ -1,0 +1,68 @@
+<div>
+   <form action="javascript:;" class="wide" v-on:submit.prevent="submitForm" v-on:keydown.enter="submitForm">
+    <div 
+      id="alert" 
+      v-if="alert.active"
+      :class="{'alert-danger' : alert.type == 'danger', 'alert-info' : alert.type == 'info'}"
+    >
+      <i v-if="alert.type == 'danger'" class="fa fa-exclamation-triangle" aria-hidden="true"></i> 
+      <i v-if="alert.type == 'info'" class="fa fa-exclamation-circle" aria-hidden="true"></i> 
+      {{alert.message}}
+    </div>
+
+    <div class="form-field username-field">
+      <label>{{translate('Username')}}<span class="text-danger">*</span></label>
+      <input v-model="form.username" type="text" placeholder="" autocomplete="username">
+    </div>
+
+    <div class="form-field password-field">
+      <label>{{translate('Password')}}<span class="text-danger">*</span></label>
+      <div class="input-wrapper">
+        <input v-model="form.password" :type="oldPasswordFieldType" placeholder="Password">
+        <button type="button" class="toggle-password" v-on:click="togglePasswordVisibility('old')">
+          <i v-if="oldPasswordFieldType === 'password'" aria-hidden="true" class="fa fa-eye fa-gray"></i>
+          <i v-else class="fa fa-eye-slash" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="password-strength-indicator" style="display: flex;flex-direction: row;">
+        <label style="position: absolute;right: 10%;top: 5%;height: 24px; margin-top: 5px;width: 35%;">Password strength:</label>
+        <div class="password-strength-bar">
+          <div :class="'bar strength-' + passwordStrength"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-field email-field" v-if="!isLogin">
+      <label>{{translate('Email')}} <span>(optional)</span> <span class="large-text-muted">This can be used for account recovery.</span></label>
+      <input v-model="form.email" type="email" placeholder="" autocomplete="email">
+      <small>You can still add an email later in your account settings.</small>
+    </div>
+
+    <div class="form-field flex-align" v-show="!loading">
+      <div class="account-left-box">
+        <p v-if="!isLogin" class="tos-text">With registering an account on Tribals.io you accept <a class="clickable-text" target="_blank" href="https://tribals.io/tos.txt">T.O.S.</a></p>
+        <span v-if="isLogin" class="link-text">Forgot your password? <span v-on:click="page = 'ForgotPassword'" class="clickable-text">Click here to reset your password.</span>
+        <p v-if="!isPoki" class="tos-text mini-info">You can find more about our <a class="clickable-text" target="_blank" href="https://tribals.io/privacy.txt">privacy policy here.</a> </p>
+      </div>
+      
+      <div class="account-button-box">
+        <p class="auth-toggle">
+          {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
+          <button 
+            v-bind:class="{'btn btn-link btn-primary': isLogin, 'btn btn-link btn-success': !isLogin}"
+            :style="{ backgroundColor: isLogin ? '#0f64bd' : 'green', color: 'white', padding: '10px 20px', margin: '0 5px' }"
+            v-on:click.prevent="toggleAuthMode"
+          >
+            {{ isLogin ? 'Register' : 'Login' }}
+          </button>
+        </p>
+        <button v-if="!isLogin" type="submit" class="btn btn-secondary"><i class="fa fa-user-plus" aria-hidden="true"></i> {{translate('Register')}}</button>
+        <button v-if="isLogin" type="submit" class="btn btn-primary">{{translate('Login')}}</button>
+      </div>
+    </div>
+
+    <div class="form-field" v-show="loading">
+      <div class="loader loader-center"></div>
+    </div>
+  </form>
+</div>

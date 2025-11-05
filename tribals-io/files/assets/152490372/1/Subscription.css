@@ -1,0 +1,375 @@
+
+.bigger-text {
+    line-height: 1.5;
+}
+
+.checkbox-container {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    place-content: center;
+}
+.checkbox-container input[type="checkbox"] {
+    cursor: pointer;
+    width: 35px;
+    height: 35px; 
+    margin-right: 10px; 
+    outline: solid 2px #252525;
+}
+
+.checkbox-container label {
+    display: block;
+    margin: 0;
+    line-height: 19px;
+    font-size: 19px;
+    color: #ffd500;
+    width: 110px;
+}
+
+.btn-tribals {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    font-size: 21px;
+    border-radius: 5px;
+    border: none;
+    margin-left: 20px;
+    font-family: 'Passion One', Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-tribals:hover{
+    opacity: 0.9;
+}
+
+.btn-tribals .icon {
+    margin-right: 10px;
+}
+
+.btn-tribals span,
+.btn-tribals b {
+    line-height: 1;
+}
+
+.bigger-text .subscription-list li{
+    font-size: 24px;
+}
+
+.bigger-text .subscription-list li a{
+    color: #ffdf00;
+}
+
+.price-container{
+    color: #fff;
+    border-left: solid 2px #5c5c5c;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    margin-left: 15px;
+    letter-spacing: 0px;
+    font-size: 25px;
+    width: 182px;
+    text-align: left;
+}
+
+.price-container small{
+    color: #ddd;
+}
+
+.see-more-button{
+    color: #ddd;
+}
+
+.small-list li {
+    font-size: 15px !important;
+    text-decoration: none !important;
+    line-height: 11px;
+    margin-left: 11px;
+}
+
+.gifting-popup {
+    height: auto;
+    padding-bottom: 80px;
+}
+
+.gifting-popup .popup-header{
+    padding-left: 0;
+}
+
+.gift-tiers {
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.gift-tiers button {
+    flex: 1; /* Each button takes equal space */
+    cursor: pointer;
+    font-size: 22px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center; 
+    margin-left: 0;
+    display: inline-block;
+}
+
+.gift-tiers button:not(:last-child) {
+    margin-right: 10px; 
+}
+
+.gift-tiers button.active {
+    border-bottom-color: #ffd500 !important;
+    opacity: 0.9 !important;
+    transition: border-bottom 0.3s, opacity 0.3s;
+    color: #ffd500;
+}
+
+
+.gifting-popup .username-input-container {
+   margin: 0;
+   float: left;
+   width: 100%;
+   box-sizing: border-box;
+}
+
+.username-message-container {
+    width: 48%;
+    float: left;
+    margin-left: 15px;
+}
+
+.gifting-popup .message-input-form {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.tiers-container {
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 15px;
+}
+
+.gift-content{
+    text-align: left;
+}
+
+.gift-content h2{
+    margin-top: 10px;
+    margin-bottom: 30px;
+    font-size: 28px;
+    margin-top: 0;
+    text-align: center;
+}
+
+.gift-example{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-gift-buy {
+    font-size: 28px;
+}
+
+.btn-gift-buy b {
+    display: flex;
+}
+
+.btn-gift-buy b span {
+    margin-top: -4px;
+}
+
+.btn-campaign-buy {
+    text-wrap: nowrap;
+    font-size: 24px;
+}
+
+.gifting-popup .subscription-tiers {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: auto;
+}
+
+.gifting-popup .subscription-tiers li {
+    text-align: left;
+    display: block;
+}
+
+.tiers-container h2 {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 28px;
+}
+
+.bigger-text .subscription-list{
+    margin-bottom: 0;
+}
+
+.subscription-list{
+    margin: 20px 0 10px 0;
+}
+
+.small-list{
+    margin: 10px 0;
+}
+
+.subscription-list li{
+    margin-bottom: 4px;
+}
+
+.bigger-text .subscription-list li{
+    font-size: 24px;
+}
+
+.bigger-text .subscription-list li a{
+    color: #ffdf00;
+}
+
+.subscription-content .small-list li .fa-check{
+    visibility: visible;
+    width: 16px;
+    display: inline-block;
+}
+
+.subscription-content .small-list li {
+    font-size: 15px;
+    margin-left: 30px;
+    opacity: 1;
+}
+
+.subscription-list li i{
+    color: #ffdf00;
+    margin-right: 5px;
+    width: 22px;
+    text-align: center;
+    display: inline-block;
+
+}
+
+.price-container{
+    color: #fff;
+    border-left: solid 2px #5c5c5c;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    margin-left: 15px;
+    letter-spacing: 0px;
+    font-size: 25px;
+    width: 182px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.price-container small{
+    color: #ddd;
+}
+
+.see-more-button{
+    color: #ddd;
+}
+
+.small-list{
+    
+}
+
+.small-list li {
+    font-size: 16px !important;
+    text-decoration: none !important;
+    line-height: 11px;
+    margin-left: 11px;
+}
+
+.popupDiscount .popup-bottom-content p {
+    flex: 4;
+}
+
+.popupDiscount .price-container {
+    width: auto;
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+    border-right: solid 2px #5c5c5c;
+    padding-right: 15px;
+}
+
+.popupConfirmation {
+    width: 1024px;
+}
+
+.popupConfirmation .subscription-content {
+    padding-left: 40px !important;
+}
+
+.popupConfirmation .subscription-list {
+    padding-left: 0;
+    margin-left: 0;
+    
+}
+
+.popupConfirmation .subscription-list li {
+    margin-bottom: 5px;
+    font-size: 20px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
+.popupConfirmation .subscription-list li > span, .popupConfirmation .subscription-list li > a {
+    margin: 0 6px
+}
+
+.popupConfirmation .subscription-list li i, .popupConfirmation .subscription-list li img {
+    margin-right: 5px;
+}
+
+.benefit-link {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: nowrap;
+    background-color: #000;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    border-left: solid 4px rgb(38 38 38);
+    color: #fff;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.benefit-link:hover {
+    background-color:rgb(38 38 38);
+    border-color:rgb(30 30 30);
+}
+
+.benefit-link img {
+    width: 16px;
+}
+
+.confirmation-buttons button {
+    font-size: 20px;
+    padding: 10px 20px;
+    text-wrap: nowrap;
+    position: relative;
+}
+
+.confirmation-buttons button:last-child::after {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 100%;
+    background-color:#464646;
+
+}

@@ -1,0 +1,74 @@
+<div v-if="popup.page == 'Inbox'" class="popup" style="width: 64%;height: 64%;">
+    <div class="popup-header">
+        Inbox
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="popup-content">
+        <p class="popup-info"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp; You can find recent logs about your bases from different servers here in this list.</p>
+        <table v-if="popup.content" class="table-last-narrow">
+            <tr>
+                <th></th>
+                <th>Message</th>
+                <th>Server</th>
+                <th>Time</th>
+            </tr>
+            <tr style="font-size: 1.1vw !important;" :class="{'viewed' : item.viewed}" v-for="item in popup.content" :key="item.id">
+                <td width="28"><img class="small-table-icon" :src="getImage(item.icon)"></td>
+                <td style="display: flex; flex-direction: column;width: 95%;">
+                    <div>
+                        <i v-if="item.viewed" class="fa fa-check-square-o little-margin-right" aria-hidden="true"></i> 
+                        {{item.message}} 
+                    </div>
+                    <div v-if="item.action === 'self_raid' || item.action === 'raid_damage' || item.action === 'lock_access'">
+                        <a 
+                            style="color: #d58848; padding: 0; font-size: 19px !important"
+                            v-if="(item.action === 'raid_damage') || (item.action === 'self_raid' && !tribalsPlus)"
+                        >
+                            Raided by:
+                        </a> 
+                        <a style="color: #d58848; padding: 0; font-size: 19px !important" v-if="item.action === 'lock_access'">Unlocked by: </a> 
+                        <span v-if="tribalsPlus">
+                            <span v-for="(username, index) in item.attackerUsernames" :key="index">
+                                {{ username }}<span v-if="index < item.attackerUsernames.length - 1">, </span>
+                            </span>
+                        </span>
+                        <span v-else>
+                            <button
+                                class="unlockTribalsInbox"
+                                v-on:click="showTribalsPlus('inbox_username_button')"
+                                :data-tooltip="tooltipText(item)"
+                            >
+                                Unlock with Tribals+
+                            </button>
+                        </span>
+                    </div>
+                </td>
+                <td>{{item.server}}</td>
+                <td>{{item.time}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="popup-bottom-content align-fit" v-if="!tribalsPlus">
+        <p>
+            You can get <a href="https://wiki.tribals.io/tribals.io-wiki/tribals+#discord-notifications" target="_blank">instant notifications</a> with <span style="color: #ffd500">Tribals+</span>
+        </p>
+        <!-- <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="popup.page = 'Gifting'" class="btn btn-gift">
+                <span aria-hidden="true">🎁</span> Gift
+            <b v-if="!waitingForPayment">
+            </b>
+            <b v-if="waitingForPayment">
+                Redirecting...
+            </b>
+        </button> -->
+        <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="showTribalsPlus('inbox_cta')" class="btn-tribals btn-primary">
+            <i class="fa fa-bell icon"></i>
+            <template v-if="!waitingForPayment">
+                Get Notification
+            </template>
+            <template v-if="waitingForPayment">
+                Wait...
+            </template>
+        </button>
+    </div>
+</div>

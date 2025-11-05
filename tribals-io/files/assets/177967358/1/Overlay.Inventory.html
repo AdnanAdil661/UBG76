@@ -1,0 +1,874 @@
+<div v-on:click="closeInventory()" class="close-button"></div>
+
+<div class="clear-inventory">
+    <button class="button button-cancel appear" v-if="isStaff && !clearInventoryConfirmation" v-on:click="clearInventoryConfirmation = true">Clear inventory</button>
+    <button class="button button-cancel appear" v-if="isStaff && clearInventoryConfirmation" v-on:click="clearInventory()">Are you sure?</button>
+</div>
+
+<div id="inventory" :class="{'external-inventory' : activeActor && inventoryTab == 'Inventory'}">
+    <div id="inventory-slots" class="inventory" :class="{'dragging' : isDragging}">
+        <div class="slot-container"> 
+            <slots 
+                v-if="isLoaded"
+                name="inventory" 
+                type="Bag" 
+                :inventory="hand.slice(5, 35)" 
+                :states="states"
+            ></slots>
+        </div>
+    </div>
+</div>
+
+<div 
+    id="equipment" 
+    v-if="!isSleeping"
+    :style="{ bottom: equipment.length > 4 ? '90px' : '120px' }"
+>
+    <div class="equipment inventory">
+        <div class="slot-container"> 
+            <slots 
+                v-if="isLoaded"
+                name="equipment" 
+                type="Equipment" 
+                :inventory="equipment.slice(0, 4)" 
+                :states="states"
+            ></slots>
+        </div>
+
+        <div v-if="equipment.length > 4" class="slot-container" style="transform: scale(0.75); transform-origin: top;">
+            <slots 
+                v-if="isLoaded"
+                name="equipment" 
+                type="Equipment" 
+                :inventory="equipment.slice(4, 8)" 
+                :states="states"
+            ></slots>
+        </div>
+    </div>
+</div>
+
+<div class="tabs inventory-tabs" v-if="activeActor">
+    <span v-on:click="inventoryTabs = 'Structure'; activeCraft.canRewardCraft = false;" :class="{ active : inventoryTabs == 'Structure' }">
+        <img class="mini-thumbnail" :src="getImage(activeActor.icon)">
+        {{activeActor.label || activeActor.name || translate('Structure')}} 
+        <a v-if="activeActor.canChangeName" href="javascript:;" v-on:click="renameBuilding()">
+            <i class="fa fa-pencil-square" aria-hidden="true"></i>
+        </a>
+    </span>
+    <span v-on:click="inventoryTabs = 'Crafting'; getCraftDetails(craftables[0].items[0]), clearBadge(craftables[0].items[0].name)" v-if="!isTabletPortrait()" :class="{ active : inventoryTabs == 'Crafting' }">
+        Crafting
+    </span>
+</div>
+
+
+<!--v-if="!activeActor"-->
+<div id="craft">
+    <div v-if="!isMobile" class="inventory-slots-tab">
+        <ul>
+            <li v-on:click="craftCategoryTab(name)" :class="{'active' : craftTab == name}" v-for="(name, index) in craftingTabs" class="hint--left hint--no-animate" :aria-label="name">
+                <div v-if="isTutorialMode && tutorialGuide && tutorialGuide.name && tutorialGuide.name.length > 1 && tutorialGuide.name === name && !tutorialGuide.crafted" class="green-arrow"></div>
+                <img :src="getImage(index + '-TabIcon.png')">
+            </li>
+        </ul>
+    </div> 
+
+    <div v-if="!isMobile" class="search-wrap">
+        <input type="text" :placeholder="translate('Search')" v-on:focus="isFocused = true" v-on:blur="isFocused = false" v-model="search.keyword">
+
+        <button v-on:click="search.keyword = ''">X</button>
+    </div>
+
+    <div id="inventory-slots" class="crafting-slots inventory">
+        <p v-if="craftTab == 'Favorite'">
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+            {{translate('You can quickly access the items you use most from this tab by adding them to your favorites.')}}
+        </p>
+
+        <div class="level" v-for="(level, index) in filterCraft(craftables)">
+            <h1><b>{{parseInt(index)}} / 5</b> {{level.name}}</h1>
+            <li 
+                class="hint--bottom hint--no-animate"
+                :aria-label="item.label"
+                :class="{'active' : item.name == activeCraft.name, 'can-craft' : craftableItems.indexOf(item.name) > -1}" 
+                v-on:click="getCraftDetails(item), clearBadge(item.name)" 
+                v-on:mouseover="playSound('Hover');"
+                v-for="item in level.items"
+                :ref="index === 0 ? 'firstItem' : ''">
+                <div v-if="isTutorialMode && tutorialGuide&& tutorialGuide.name && tutorialGuide.name.length > 1 && tutorialGuide.name === item.name && !tutorialGuide.crafted" class="green-arrow"></div>
+                <img
+                :src="getImage(item.icon)"
+                >
+                <span v-if="newItems.indexOf(item.name) > -1" class="new"></span>
+                <!--
+                <img
+                v-if="craftables.level < item.craftingLevel"
+                :src="getImage('Question-Mark.png')"
+                >-->
+        </li> 
+        </div>
+    </div>
+</div>
+
+<div id="crafting-table" v-if="!activeActor && activeCraft || inventoryTabs == 'Crafting' || isTabletPortrait()">
+    <h1>
+        <img
+            class="craft-thumbnail"
+            :src="getImage(activeCraft.icon)"
+        >
+        {{activeCraft.label}}
+        <div class="favorite-box" v-on:click="setFavoriteCraftItem(activeCraft)" v-if="activeCraft">
+            <i class="fa" :class="{'fa-star active' : favoriteItems && favoriteItems.includes(activeCraft.name), 'fa-star-o' : !favoriteItems || !favoriteItems.includes(activeCraft.name)}" 
+            aria-hidden="true"></i>
+        </div>
+    </h1>
+
+    <p v-if="!isMobile" class="craft-description" v-html="activeCraft.description"></p>
+
+    <p class="line"></p>
+
+    <div id="crafting-content">
+        <div id="crafted" v-if="crafted" v-on:click="switchTab('Inventory')">
+            <img :src="getImage(crafted)">
+        </div>
+        <table class="table-list">
+            <tr>
+                <td></td>
+                <td>Name</td>
+                <td>You Need</td>
+                <td>You Have</td>
+                <td>Action</td>
+            </tr>
+
+            <tr 
+                v-for="resource in activeCraft.recipe"
+                :class="{'active' : resource.available >= resource.stack, 'needs' : resource.available < resource.stack}"
+                v-on:click="viewByCraftName(resource.name)"
+            >
+                <td><img class="icon" :src="getImage(resource.icon)"></td>
+                <td style="white-space: nowrap;">{{resource.label}}</td>
+                <td>{{resource.stack}}x</td>
+                <td>{{resource.available}}x</td>
+                <td>
+                    <span 
+                        class="craft-plus" 
+                        v-if="!resource.isResource && resource.available < resource.stack && !isCrafting" 
+                        v-on:click="craft(resource)"
+                    >+ CRAFT
+                    </span>
+                </td>
+            </tr>
+        </table>
+
+        <!--
+        <p v-if="activeCraft.animalDamage && !isMobile" class="damage-description">{{translate('Animal Damage')}}: <b class="red">{{activeCraft.animalDamage}}</b></p>
+        <p v-if="activeCraft.buildingDamage && !isMobile" class="damage-description">{{translate('Building Damage')}}: <b class="red">{{activeCraft.buildingDamage}}</b></p>
+        <p v-if="activeCraft.playerDamage && !isMobile" class="damage-description">{{translate('Player Damage')}}: <b class="red">{{activeCraft.playerDamage}}</b></p>
+        -->
+    </div>
+
+    <div id="craft-bottom">
+        <div v-if="versionNumber >= 1.0 && inventoryTabs !== 'Inventory'" id="crafting-queue">
+            <button v-if="!tribalsPlus" :disabled="isFastCrafting > 0" v-on:click="fastCraft()" :class="{'queue-clear-button': true, 'hint--top': !tribalsPlus, 'hint--no-animate': !tribalsPlus}" aria-label="With Tribals+ you can fast craft with no ads!">
+                <span class="fastCraft-timer" v-if="isFastCrafting <= 0 && !tribalsPlus && isFastCraftingWait < 1">
+                    <img :src="getImage('WatchAd-Icon.png')"> Fast Craft
+                </span>
+                <span style="color: #ebcfac;" v-if="isFastCrafting > 0">
+                    {{mmss(isFastCrafting)}}
+                </span>
+                <span 
+                    style="color: #1a1512; cursor: pointer;"
+                    class="fastCraft-timer"
+                    v-if="isFastCrafting <= 0 && isFastCraftingWait > 0"
+                >
+                    <i class="fa fa-lock" aria-hidden="true"></i> {{ mmss(isFastCraftingWait) }}
+                </span>
+            </button>
+            <div v-if="tribalsPlus" style="cursor: inherit;":class="{'queue-clear-button': true, 'hint--top': !tribalsPlus, 'hint--no-animate': !tribalsPlus}" aria-label="Fast Craft is Active!">
+                <span>💎</span>
+            </div>
+            <div class="queue">
+                <li v-on:click="cancelCrafting(craftingQueue[index])" :class="{'active': craftingQueue[index]}" v-for="index in [0, 1, 2, 3, 4]" class="hint--bottom hint--no-animate" :aria-label="craftingQueue[index] && ('Cancel ' + craftingQueue[index].name)">
+                    <span v-if="craftingQueue[index]">
+                        <img :src="getImage(craftingQueue[index].icon)">
+                        <span v-if="index == 0 && craftingQueueState == 'Okay'" class="spinner" :style="{'animation-duration' : craftingQueue[index].duration + 's'}"></span>
+                        <span v-if="craftingQueueState == 'Okay'" class="time">{{craftingQueue[index].duration}}s</span>
+                        <span v-if="craftingQueueState == 'Fail'" class="time time-alert"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
+                    </span>
+                </li>
+                <span v-if="craftingQueue.length > 5" class="queue-size">{{craftingQueue.length - 5}} more</span>
+
+            </div>
+        </div>
+
+        <button v-if="!activeCraft.canRewardCraft" class="craft-button" v-on:mousedown="craftWithQueue(activeCraft)" :class="{'disabled' : !canCraft(activeCraft)}">
+            <div v-if="isCrafting" class="loader loader-center"></div>
+            <span v-if="!isCrafting">
+                <div v-if="isTutorialMode && tutorialGuide && tutorialGuide.name && tutorialGuide.name.length > 1 && tutorialGuide.name === activeCraft.name && canCraft(activeCraft) && !tutorialGuide.crafted" class="green-arrow"></div>
+                <img :src="getImage('Harvest-Icon.png')">
+                {{translate('Craft')}}
+                <!--<small>+{{activeCraft.craftingXP}} XP</small>-->
+            </span>
+        </button>
+
+        <button v-if="activeCraft.canRewardCraft" class="craft-button craft-reward" v-on:mousedown="rewardCraft(activeCraft)">
+            <div v-if="isCrafting" class="loader loader-center"></div>
+            <span v-if="!isCrafting">
+                <img :src="getImage('WatchAd-Icon.png')">
+                {{translate('Claim')}}
+            </span>
+        </button>
+    </div>
+</div>
+
+<div id="error" v-if="errorMessage" class="gameplay-element" @click="hide">
+    <img :src="errorIcon"> {{errorMessage}}
+</div>
+
+<div id="external-inventory" v-if="activeActor && inventoryTab == 'Inventory' && inventoryTabs !== 'Crafting' || isTabletPortrait()"
+:class="activeActor.name" 
+class="inventory">
+    <!-- Commenting out to gain space vertically
+        <h3>
+        <img class="mini-thumbnail" :src="getImage(activeActor.icon)">
+        {{activeActor.label || activeActor.name}}
+        <a v-if="activeActor.canChangeName" href="javascript:;" v-on:click="renameBuilding()">
+            <i class="fa fa-pencil-square" aria-hidden="true"></i>
+        </a>
+    </h3>-->
+
+
+    <h3 v-if="activeActor.canSort && tribalsPlus" class="sort-button" v-on:click="sortInventory();">
+        Sort
+    </h3>
+    <!-- <span v-if="activeActor.name == 'Storage' && !isMobile" class="information">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{translate('Double click to move faster.')}} 
+
+    </span> -->
+    <!--<button v-if="activeActor.action" class="primary-button" :class="{'active' : activeActor.state}" v-on:click="actorAction()">{{activeActor.action}} : {{activeActor.state}}</button>-->
+    
+    <div class="external-craft-section" v-if="activeActor.name == 'Workbench'">
+        <div v-if="!currentListing" class="listing-table">
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>{{translate('Name')}} </th>
+                    <th>{{translate('Resources')}}</th>
+                    <th>{{translate('Action')}}</th>
+                </tr>
+                <tr v-for="item in activeActor.listing">
+                    <td>
+                        <img :src="getImage(item.icon)">
+                    </td>
+                    <td><span v-html="formatListingName(item.item)"></span></td>
+                    <td><div class="crafting-recipe" v-html="formatCraftRecipe(item.craft)"></div></td>
+                    <td>
+                        <button data-tooltip="CRAFT" v-on:click="selectListing(item)" class="button">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="exterior-listing" v-if="currentListing && currentListing.name">
+            
+            <div class="section-title"><b>{{translate('Craft')}}: {{currentListing.name}}</b> <span v-on:click="currentListing = false" class="button button-cancel pull-right"><i class="fa fa-caret-left" aria-hidden="true"></i> {{translate('Go Back')}}</span></div>
+
+            <div class="toolbox-info">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> {{translate('In order to craft those items, you need to place resources and click craft.')}} 
+            </div>
+            
+            <slots 
+                v-if="isLoaded && currentListing.items"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, currentListing.items.length)" 
+                :states="states"
+                :items="currentListing.items"
+                :icons="currentListing.icons"
+                :needs="currentListing.needs"
+            >
+            </slots>
+
+            
+
+            <div id="craft-bottom">
+                <div v-if="versionNumber >= 1.0 && inventoryTabs !== 'Inventory'" id="crafting-queue">
+                    <button v-if="!tribalsPlus" :disabled="isFastCrafting > 0" v-on:click="fastCraft()" :class="{'queue-clear-button': true, 'hint--top': !tribalsPlus, 'hint--no-animate': !tribalsPlus}" aria-label="With Tribals+ you can fast craft with no ads!">
+                        <span class="fastCraft-timer" v-if="isFastCrafting <= 0 && !tribalsPlus && isFastCraftingWait < 1">
+                            <img :src="getImage('WatchAd-Icon.png')"> Fast Craft
+                        </span>
+                        <span style="color: #ebcfac;" v-if="isFastCrafting > 0">
+                            {{mmss(isFastCrafting)}}
+                        </span>
+                        <span 
+                            style="color: #1a1512; cursor: pointer;"
+                            class="fastCraft-timer"
+                            v-if="isFastCrafting <= 0 && isFastCraftingWait > 0"
+                        >
+                            <i class="fa fa-lock" aria-hidden="true"></i> {{ mmss(isFastCraftingWait) }}
+                        </span>
+                    </button>
+                    <div v-if="tribalsPlus" style="cursor: inherit;":class="{'queue-clear-button': true, 'hint--top': !tribalsPlus, 'hint--no-animate': !tribalsPlus}" aria-label="Fast Craft is Active!">
+                        <span>💎</span>
+                    </div>
+                    <div class="queue">
+                        <li v-on:click="cancelCrafting(craftingQueue[index])" :class="{'active': craftingQueue[index]}" v-for="index in [0, 1, 2, 3, 4]" class="hint--bottom hint--no-animate" :aria-label="craftingQueue[index] && ('Cancel ' + craftingQueue[index].name)">
+                            <span v-if="craftingQueue[index]">
+                                <img :src="getImage(craftingQueue[index].icon)">
+                                <span v-if="index == 0 && craftingQueueState == 'Okay'" class="spinner" :style="{'animation-duration' : craftingQueue[index].duration + 's'}"></span>
+                                <span v-if="craftingQueueState == 'Okay'" class="time">{{craftingQueue[index].duration}}s</span>
+                                <span v-if="craftingQueueState == 'Fail'" class="time time-alert"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
+                            </span>
+                        </li>
+                        <span v-if="craftingQueue.length > 5" class="queue-size">{{craftingQueue.length - 5}} more</span>
+                    </div>
+                </div>
+        
+                <button class="craft-button" v-on:mousedown="craftWithQueueWorkbench(currentListing.name)">
+                    <div v-if="isActorBusy" class="loader loader-center"></div>
+                    <span v-if="!isActorBusy">
+                        <img :src="getImage('Harvest-Icon.png')">
+                        {{translate('Craft')}}
+                    </span>
+                </button>
+                
+                <button v-if="activeCraft.canRewardCraft" class="craft-button craft-reward" v-on:mousedown="rewardCraft(activeCraft)">
+                    <div v-if="isCrafting" class="loader loader-center"></div>
+                    <span v-if="!isCrafting">
+                        <img :src="getImage('WatchAd-Icon.png')">
+                        {{translate('Claim')}}
+                    </span>
+                </button>
+            </div>
+            
+        </div>
+        <div class="book-wrapper" v-if="!currentListing">
+            <div class="section-title">
+                <i class="fa fa-book" aria-hidden="true"></i> {{translate('Library')}}
+                <i class="hint--bottom hint--no-animate" aria-label="You can find books from barrels!" class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(5, 10)" 
+                :states="states"
+                :actor="activeActor"
+                :icons="['BookOverlay-Icon.png', 'BookOverlay-Icon.png', 'BookOverlay-Icon.png', 'BookOverlay-Icon.png', 'BookOverlay-Icon.png']"
+            >
+            </slots>
+        </div>
+    </div>
+
+    <div id="repair-table" class="external-craft-section" v-if="activeActor.name == 'RepairTable'">
+        <div class="section-wrapper center-content">
+            
+            
+
+            <div class="external-center-content"  :class="{'not-broken' : Array.isArray(repairCostList) && isBrandNew(repairCostList)}">
+                <div class="center-slot">
+                    <slots 
+                        v-if="isLoaded"
+                        name="external-inventory" 
+                        type="External" 
+                        :inventory="activeActor.inventory.slice(0, activeActor.slots)" 
+                        :states="states"
+                        :icons="['Hammer-Icon.png']"
+                        :actor="activeActor"
+                        :data-tooltip="repairSkinList.length == 0 ? 'Drag an item here to repair or see the available skins!' : null"
+                    >
+                    </slots>
+                </div>
+
+                <div class="repair-section-info" v-if="repairCostList.length > 0 && !(Array.isArray(repairCostList) && isBrandNew(repairCostList))">
+                    <h2 class="title"> {{translate('Needs Materials')}}  </h2>
+
+                    <div class="repair-info-item-wrapper">
+                        <div class="repair-info-item" v-for="item in repairCostList" v-if="item.stack > 0">
+                            <span style="display: inline-block" :data-tooltip="item.stack + ' ' + item.name">
+                                <img :src="getImage(item.name + '-Icon.png')">
+                            </span>
+                            <span>{{ item.stack + 'x ' }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="isBrandNew(repairCostList)">YOUR ITEM IS BRAND-NEW</div>
+            </div>
+            
+            <div class="skin-list" v-if="repairSkinList.length > 0">
+                <h2>{{ translate(repairSkinList.length + ' Skin' + (repairSkinList.length > 1 ? 's' : '')) }}</h2>
+                <div class="scroll-container">
+                    <span v-on:click="clickToScrollHorizontal('left')" class="scroll-btn scroll-left" v-if="repairSkinList.length > 5"><i class="fa fa-chevron-left"></i></span>
+
+                    <div id="scroll-wrapper" class="skin-wrapper" :class="{'center-align' : repairSkinList.length < 5 }">
+                        <div class="skin-content" v-for="skin in repairSkinList">
+                            <div class="skin-icon-container hint--right hint--no-animate" v-on:click="actorAction(skin.name)" :aria-label="skin.name">
+                                <img :src="skin.thumbnail" class="item-image">
+                                <div class="skin-info" v-if="!tribalsPlus && skin.adsWatched < skin.reward_count">
+                                    <i class="fa fa-film"></i>
+                                    <span class="ad-count">{{skin.adsWatched}} / {{skin.reward_count}}</span>
+                                </div>
+                                <div class="skin-info" v-if="tribalsPlus">
+                                    <span class="free-text">Free</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span v-on:click="clickToScrollHorizontal('right')" class="scroll-btn scroll-right" v-if="repairSkinList.length > 5"><i class="fa fa-chevron-right"></i></span>
+                </div>
+
+            </div>
+
+            <div class="toolbox-info small" v-if="repairSkinList.length == 0">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> {{translate('Place an item in the slot above to start repairing!')}} 
+            </div>
+
+            <button class="craft-button" v-on:mousedown="actorAction(currentListing.name)" v-if="repairCostList.length > 0 && !(Array.isArray(repairCostList) && isBrandNew(repairCostList))">
+                <div v-if="isActorBusy" class="loader loader-center"></div>
+                <span v-if="!isActorBusy">
+                    <img :src="getImage('Hammer-Icon.png')">
+                    {{translate('Repair')}}
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <div v-if="activeActor.name == 'VendingMachine'" style="height: 100%;">
+        <div v-if="actorTab == 'General'"  class="listing-head-wrap">
+            
+            <div class="section-title section-title-includes-btn section-title-medium">
+                {{translate('Listings')}} 
+                <div class="listing-button-wrap"  v-if="activeActor.isOwner || activeActor.isAuthorized">
+                    <span  v-if="activeActor.isOwner" v-on:click="actorTrigger('openCase'); actorTab = 'Case';" class="button pull-right"><i class="fa fa-inbox" aria-hidden="true"></i> {{translate('Safe')}}</span>
+                    <span v-if="activeActor.isOwner || activeActor.isAuthorized" v-on:click="actorTrigger('modifyText')" class="button pull-right"><i class="fa fa-pencil" aria-hidden="true"></i> {{translate('Update Text')}} </span>
+                    <span  v-if="activeActor.isOwner" v-on:click="setActorTab('Sell'); actorForm.item = activeActor.currency[0];" class="button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i> {{translate('Sell Item')}}</span>
+                </div>
+            </div>
+
+        </div>
+        <div v-if="actorTab == 'General'" class="listing-table listing-scroll">                
+            
+
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>{{translate('Name')}}</th>
+                    <th>{{translate('Price')}}</th>
+                    <th>{{translate('Action')}}</th>
+                </tr>
+                <tr v-for="item in activeActor.listing">
+                    <td class="vendingmachine-header">
+                        <img :class="{'broken-icon' : item.isBroken}" class="vendingmachine-icon" :src="getImage(item.icon)">
+                        <span class="broken" v-if="item.isBroken"></span>
+                        
+                        <div class="durability" v-if="item.maxDurability >= 0 && item.durability >= 0 && item.durabilityPercentage >= 0 && !item.isBroken">
+                            <span class="fill" :style="{ 'width' : item.durabilityPercentage + '%' }"></span>
+                            <span class="lostDurability" :style="{'width' : item.lostDurabilityPercentage + '%', 'left' : 100-item.lostDurabilityPercentage + '%'}"></span>
+                        </div>
+                    </td>
+                    <td>{{item.name}} <small>({{item.stack}}x)</small></td>
+                    <td><div class="crafting-recipe" v-html="formatCraftRecipe(item.price)"></div></td>
+                    <td>
+                        <button v-on:click="selectListing(item)" class="button">
+                            {{translate('Select')}}<i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="sell-listing buy-listing" v-if="actorTab == 'Item'">
+            
+            <div class="section-title section-title-includes-btn section-title-medium">
+                {{translate('Buy')}}
+                <span v-on:click="setActorTab('General');" class="button button-cancel pull-right"><i class="fa fa-caret-left" aria-hidden="true"></i> {{translate('Go Back')}}</span>
+            </div>
+            <div id="item-details">
+                <img :class="{'broken-icon' : currentListing.isBroken}" class="icon" :src="getImage(currentListing.icon)">
+                <span class="broken" v-if="currentListing.isBroken"></span>
+                <div class="durability" v-if="currentListing.maxDurability >= 0 && currentListing.durability >= 0 && currentListing.durabilityPercentage >= 0 && !currentListing.isBroken">
+                            <span class="fill" :style="{ 'width' : currentListing.durabilityPercentage + '%' }"></span>
+                            <span class="lostDurability" :style="{'width' : currentListing.lostDurabilityPercentage + '%', 'left' : 100-currentListing.lostDurabilityPercentage + '%'}"></span>
+                </div>
+
+                <h4>{{currentListing.name}}</h4>
+                <p>{{translate('Stack')}} : {{currentListing.stack}}x</p>
+                <p>{{translate('Owner')}} : {{currentListing.owner}}</p>
+            </div>
+            <div class="listing-button-slot">
+                <needs-slots 
+                    v-if="isLoaded && currentListing.items"
+                    name="external-inventory"
+                    type="External"
+                    :inventory="activeActor.inventory.slice(0, 5)"
+                    :states="states"
+                    :items="currentListing.items"
+                    :icons="currentListing.icons"
+                    :needs="currentListing.needs"
+                >
+                </needs-slots>
+
+                <button class="craft-button" v-on:mousedown="actorAction(currentListing.networkId)">
+                    <div v-if="isActorBusy" class="loader loader-center"></div>
+                    <span v-if="!isActorBusy">
+                        <img :src="getImage('TradeBox-Pin.png')">
+                        {{translate('Buy')}} 
+                    </span>
+                </button>
+            </div>
+        </div>
+        <div class="sell-listing" v-if="actorTab == 'Sell'">
+            <div class="section-title section-title-includes-btn section-title-medium">
+                <span><i class="fa fa-plus-circle" aria-hidden="true"></i> {{translate('Sell Item')}} </span>
+                <span v-on:click="setActorTab('General');" class="button button-cancel pull-right"><i class="fa fa-caret-left" aria-hidden="true"></i> {{translate('Go Back')}}</span>
+            </div>
+
+            <div class="section-title section-title-medium">{{translate('Item')}}</div>
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, 1)" 
+                :states="states"
+                :actor="activeActor"
+            >
+            </slots>
+
+            <div class="section-title section-title-medium">{{translate('In Return')}}?</div>
+            <div class="vending-return">
+                <img class="select-thumbnail" :src="getImage(actorForm.item.icon)">
+                <select v-model="actorForm.item">
+                    <option :value="item" v-for="(item, index) in activeActor.currency">{{item.name}}</option>
+                </select>
+                <input class="select-stack" type="number" min="1" max="1000" v-model="actorForm.stack" >
+
+                <button class="craft-button" v-on:mousedown="actorTrigger('sellItem', actorForm)" >
+                    <span>
+                        <img :src="getImage('TradeBox-Pin.png')">
+                        {{translate('Sell')}}
+                    </span>
+                </button>
+            </div>
+            
+        </div>
+
+        <div v-if="actorTab == 'Case'" class="listing-table listing-scroll">
+            
+            <div class="section-title section-title-includes-btn section-title-medium">
+                <span>{{translate('Case')}}</span>
+                <span v-on:click="setActorTab('General');" class="button button-cancel pull-right"><i class="fa fa-caret-left" aria-hidden="true"></i> {{translate('Go Back')}}</span>
+            </div>
+
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>{{translate('Name')}}</th>
+                    <th>{{translate('Action')}}</th>
+                </tr>
+                <tr v-for="item in activeActor.case">
+                    <td>
+                        <img :src="getImage(item.icon)">
+                    </td>
+                    <td>{{item.name}} <small>({{item.stack}}x)</small></td>
+                    <td>
+                        <button v-on:click="actorTrigger('transfer', item)" class="button">
+                            {{translate('Transfer')}}<i class="fa fa-exchange" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="description-container" v-if="activeActor.name == 'Campfire'">
+                <div class="section-title">{{translate('Food')}}</div>
+        <slots 
+            v-if="isLoaded"
+            name="external-inventory" 
+            type="External" 
+            action="Heat"
+            :inventory="activeActor.inventory.slice(0, 1)" 
+            :states="states"
+            :actor="activeActor"
+        >
+        </slots>
+
+        <div class="section-title">{{translate('Fuel')}}</div>
+
+        <slots 
+            v-if="isLoaded"
+            name="external-inventory" 
+            type="External" 
+            :inventory="activeActor.inventory.slice(1, 2)" 
+            :states="states"
+            :items="['Wood']"
+            :icons="['Wood-Icon.png']"
+            :needs="[1]"
+            :actor="activeActor"
+        >
+        </slots>
+
+        <div class="inventory-output">
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(2, 4)" 
+                :states="states"
+                :actor="activeActor"
+            >
+            </slots>
+        </div>
+
+        <div class="section-description">
+            {{translate('Cook food or smelt raw materials. You can do it using Wood.')}} 
+        </div>
+
+        <button class="craft-button" :class="{'turn-off' : activeActor.state, 'turn-on' : !activeActor.state}" v-on:mousedown="actorToggle()">
+            <span>
+                <img :src="getImage('Campfire-Icon.png')">
+                {{!activeActor.state ? translate('Turn On') : translate('Turn Off') }}
+            </span>
+        </button>
+    </div>
+
+    <div id="RewardTotem" v-if="activeActor.name == 'RewardTotem'">
+        <div class="section-title"> {{translate('Put Item')}}  </div>
+        <div id="actor-attention" v-if="attentionText">
+            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            {{attentionText}}
+        </div>
+
+        <slots 
+            v-if="isLoaded"
+            name="external-inventory" 
+            type="External" 
+            :inventory="activeActor.inventory.slice(0, 1)" 
+            :states="states"
+            :actor="activeActor"
+        >
+        </slots>
+
+        <div class="section-description">
+            {{activeActor.description}}
+        </div>
+
+        <button class="craft-button" v-on:mousedown="actorToggle()">
+            <span>
+                <img :src="getImage('WatchAd-Icon.png')">
+                {{translate('Claim')}}
+            </span>
+        </button>
+    </div>
+
+    <div v-if="activeActor.name == 'Smelter'" class="description-container">
+        <div class="section-description">
+            {{translate('You can cook food, or smelt materials. You can cook or smelt with wood.')}}
+        </div>
+
+        <div class="section-title">{{translate('Material')}} </div>
+
+        <slots 
+            v-if="isLoaded"
+            name="external-inventory" 
+            type="External" 
+            action="Heat"
+            :inventory="activeActor.inventory.slice(0, 4)" 
+            :states="states"
+            :actor="activeActor"
+        >
+        </slots>
+
+        <div class="section-title">{{translate('Fuel')}}</div>
+
+        <slots 
+            v-if="isLoaded"
+            name="external-inventory" 
+            type="External" 
+            :inventory="activeActor.inventory.slice(4, 5)" 
+            :states="states"
+            :items="['Wood']"
+            :icons="['Wood-Icon.png']"
+            :needs="[1]"
+            :actor="activeActor"
+        >
+        </slots>
+
+        
+
+        <button class="craft-button" :class="{'turn-off' : activeActor.state, 'turn-on' : !activeActor.state}" v-on:mousedown="actorToggle()">
+            <span>
+                <img :src="getImage('Smelter-Icon.png')">
+                {{!activeActor.state ? translate('Melt') : translate('Stop')}}
+            </span>
+        </button>
+    </div>
+
+    <div class="external-inventory-section" v-if="activeActor.name == 'Storage'">
+        <div class="slot-container">
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, 35)" 
+                :states="states"
+            >
+            </slots>
+        </div>
+    </div>
+
+    <div class="external-inventory-section" v-if="activeActor.name == 'BigStorage'">
+        <div class="slot-container">
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, 35)" 
+                :states="states"
+            >
+            </slots>
+        </div>
+    </div>
+
+    <div class="external-inventory-section" v-if="activeActor.name == 'EventChest'">
+        <div class="slot-container">
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, 35)" 
+                :states="states"
+            >
+            </slots>
+        </div>
+    </div>
+
+    <div class="external-inventory-section" v-if="activeActor.name == 'TrapPlatform'">
+        <div class="slot-container">
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, 35)" 
+                :states="states"
+            >
+            </slots>
+        </div>
+    </div>
+
+    <div class="external-inventory-section" v-if="activeActor.name == 'BuildingSack'">
+        <div class="slot-container">
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, 35)" 
+                :states="states"
+            >
+            </slots>
+        </div>
+    </div>
+
+    <div class="external-inventory-section" v-if="activeActor.name == 'Toolbox'">
+        <div class="toolbox-info">
+            <i class="fa fa-clock-o" aria-hidden="true"></i> {{translate('Toolbox can protect the base for')}}  <b :class="{'danger' : activeActor.time == '0d 0h 0m'}" class="success">{{activeActor.time}}</b>.<br>
+            <i class="fa fa-cubes" aria-hidden="true"></i> <b>{{activeActor.protecting}}</b> {{translate('structures are being protected.')}} <br>
+            <i class="fa fa-check-circle-o" aria-hidden="true"></i> {{translate('Put wood, stone, or iron bar to maintain.')}} 
+        </div>
+        <div class="slot-container"> 
+            <slots 
+                v-if="isLoaded"
+                name="external-inventory" 
+                type="External" 
+                :inventory="activeActor.inventory.slice(0, 10)" 
+                :states="states"
+                :actor="activeActor"
+            >
+            </slots>
+        </div>
+    </div>
+
+    <div class="external-inventory-section" v-if="activeActor.name == 'FishingNet'">
+        <slots 
+            v-if="isLoaded"
+            name="external-inventory" 
+            type="External" 
+            :inventory="activeActor.inventory.slice(0, 3)" 
+            :states="states"
+        >
+        </slots>
+
+        <div class="section-description">
+            <i class="fa fa-clock-o" aria-hidden="true"></i> {{translate('Catching fish takes time. Check the fishing net later.')}}  
+        </div>
+    </div>
+</div>
+
+<!--<div id="inventory-banner" v-if="showInventory">
+
+</div>-->
+
+<div id="party" class="party-wrapper">
+    
+    <div class="create-party" v-if="!party.request && !party.active">
+
+        <!--<div class="invite-party">
+            <input 
+                v-on:blur="blurChat()"
+                id="invite-username"
+                v-model="party.invited"
+                v-on:click="focusPartyInput()"
+                autocomplete="off"
+                type="text" 
+                :placeholder="translate('Enter username for invite to party!')"
+            />
+            <button v-on:click="partyInvite()">{{translate('Invite Party')}}</button>
+        </div>-->
+
+        <button v-on:click="createParty()">{{translate('Create Party')}}</button>
+
+    </div>
+
+    <div class="party-request" v-if="party.request">
+        <p>
+            {{translate('You were invited to join')}} {{party.inviterName}}'s {{translate('team')}}
+        </p>
+        <div class="party-button-wrap request-confirmation">
+            <button class="success-btn" v-on:click="acceptPartyInvite()">Accept</button>
+            <button class="danger-btn" v-on:click="declinePartyInvite()">Reject</button>
+        </div>
+    </div>
+
+    <div class="current-party" v-if="party.active">
+        <ul class="party-members" v-show="showMembers">
+            <li class="party-member" :class="member.status" v-for="member in party.members">
+                <p>{{member.username}}</p>
+                <div class="member-status" v-if="party.owner && !member.owner && member.username">
+                    <button class="danger-btn" v-if="!party.selectedMemberForKick && !party.selectedMemberForTransfer" v-on:click="party.selectedMemberForKick = member.username">Kick</button>
+                    <div class="party-button-wrap kick-confirmation" v-if="party.selectedMemberForKick">
+                        <button class="success-btn" v-on:click="kickParty(member.username)"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        <button class="danger-btn"  v-on:click="party.selectedMemberForKick = ''"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    </div>
+                    
+                    <div class="party-button-wrap kick-confirmation" v-if="party.selectedMemberForTransfer" v-if="member.status != 'offline'">
+                        <button class="success-btn"  v-if="member.status != 'offline'" v-on:click="transferOwnership(member.networkId)"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        <button class="danger-btn"  v-if="member.status != 'offline'" v-on:click="party.selectedMemberForTransfer = ''"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="member-actions" v-if="member.status != 'offline' || party.partyPlus == false">
+                        <button class="danger-btn transfer-btn" v-if="!party.selectedMemberForTransfer && !party.selectedMemberForKick && party.partyPlus == false" v-on:click="party.selectedMemberForTransfer = member.username">
+                            Transfer
+                        </button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        
+        <div style="display: flex;place-content: center space-evenly;width: 100%;align-items: center;margin-top: 5px;">
+            <button class="queue-clear-button" style="height: 30px;font-size: 12px;" v-on:click="toggleMembers()">
+                {{ showMembers ? "Hide Members" : "Show Members" }}
+            </button>
+            <button class="leave-party danger-btn" v-if="!party.owner && !party.request" v-on:click="leaveParty()">{{translate('Leave Party')}}</button>
+            <button class="leave-party danger-btn" v-if="party.owner && !party.request" v-on:click="leaveParty()">{{translate('Disband Party')}}</button>
+        </div>            
+    </div>
+</div>

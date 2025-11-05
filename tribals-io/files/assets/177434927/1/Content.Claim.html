@@ -1,0 +1,26 @@
+<div class="popup claiming" v-if="popup.page == 'Claiming'">
+    <div class="popup-header">
+        <span class="title">Code Claiming</span>
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="popup-content-center popup-no-scroll">
+        <h1>🎁 CLAIM YOUR TRIBALS + 🎁</h1>
+        <div class="centered">
+            <div class="username-input-container">
+                <div class="username-title">CODE</div>
+                <input v-model="contentClaimCode" class="username-input-form" placeholder="Code goes here...">
+            </div>
+            <div class="input-button-container"> <!-- New wrapper for button and list -->
+                <button class="btn btn-primary" v-on:click="claimTribalsPlusCode()">
+                    <i class="fab fa-discord"></i> {{ translate('CLAIM') }}
+                </button>
+                <ul class="claim-callback">
+                    <li class="error" v-if="codeErrorMessage.length > 0">{{ codeErrorMessage }}</li>
+                    <li class="success" v-if="codeSuccessMessage.length > 0">{{ codeSuccessMessage }}</li>
+                </ul>
+            </div>
+        </div>
+    </div> 
+   
+</div>

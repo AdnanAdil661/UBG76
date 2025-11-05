@@ -1,0 +1,411 @@
+<div class="popup" v-if="popup.page == 'Subscription'">
+    <div class="popup-header">
+        <span class="title">Tribals+</span>
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="popup-content popup-no-pad popup-no-scroll">
+
+        <div class="popup-content-side">
+            <video style="width:100%; height:100%;" autoplay muted loop>
+                <source src="https://assets.tribals.io/Subscription-Banner.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div v-if="!isPoki" class="subscription-content">
+            <ul class="subscription-list">
+                <li class="active">
+                    <i class="fa fa-remove"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="All the ads will removed from your experience!">No ads!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-server"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Special servers only for Tribals+ users">Premium Servers! (Transfers ENABLED)</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-paint-brush"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Unlock more Username Colors & Emojis based on your streak!">Change your Username Color & Emoji!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-bell"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Get private message on Discord and in-game chat when your base is being attacked!">Instant Inbox Notifications on base attack!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-users"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Tribals+ Party Owners parties stay across every Official Server!">Keep parties across servers!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-bolt"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Normal Respawning from 10 seconds to 5 seconds, Sleeping Bed from 300 seconds to 120 seconds.">Respawn Faster!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-user-plus"></i> Instantly join full servers!
+                </li>
+                <li class="active">
+                    <i class="fa fa-play"></i> Fast craft infinitely.
+                </li>
+            </ul>
+            <ul class="small-list">
+                <li><i class="fa fa-check"></i> Recruit up to 50 clan members</li>
+                <li><i class="fa fa-check"></i> Longer clan name slug (up to 6 characters!)</li>
+                <li><i class="fa fa-check"></i> Ignore up to 100 players in the chat</li>
+                <li><i class="fa fa-check"></i> Stand out more in chat: "<span data-tooltip="Tribals+ players' nickname appears in a special color along with a diamond emoji!" style="color: #00a6ed; opacity: 1;">💎 <b>{{profile.username || 'Nickname'}}<b/>:</span> Wow!"</li>
+                <li><i class="fa fa-check"></i> Change your voice pitch in voice chat</li>
+                <li><i class="fa fa-check"></i> And more Tribals+ membership benefits!</li>
+            </ul>
+        </div>
+
+        <div v-if="isPoki" class="subscription-content">
+            <br>
+            <p class="popup-info"><i class="fa fa-info-circle" aria-hidden="true"></i> This feature is not possible under Poki.com. Please visit Tribals.io directly to buy Tribals+.</p>
+        </div>
+    </div>
+
+    
+    <div class="popup-bottom-content align-fit">
+        <p style="width: 400px;">
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Questions?</a></br>
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Join our <span style="color: #7289da;">Discord <img src="discord_icon.png" alt="Discord Icon" style="width: 10px; height: 10px;"></span></a>
+        </p>
+        <div class="checkbox-container">
+            <input type="checkbox" id="save-offer" v-model="checkboxChecked" v-on:change="checkSelection">
+            <label for="save-offer">Get 3 months</br>Save 33%</label>
+        </div>
+        <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="popup.page = 'Gifting'" class="btn btn-tribals btn-gift">
+            <template v-if="!waitingForPayment">
+                <span aria-hidden="true">🎁</span> Gift
+            </template>
+            <template v-if="waitingForPayment">
+                Redirecting...
+            </template>
+        </button>
+        <div class="price-container">
+            ${{price}}<small>/Month</small>
+        </div>
+        <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="buyTribalsPlus(); setAction('buy_button');" class="btn-tribals btn-primary btn-gift-buy">
+            <i class="fa fa-check icon"></i>
+            <template v-if="!waitingForPayment">
+                Subscribe
+            </template>
+            <template v-if="waitingForPayment">
+                Wait...
+            </template>
+        </button>
+    </div>
+</div>
+
+<div class="popup popupDiscount" v-if="popup.page == 'DiscountTribalsPlusV2'">
+    <div class="popup-header">
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+        <span class="title">Tribals+</span> <span style="float: right; margin-right: 20px;">Limited time offer: <b style="color: red;">{{discount.time}}</b> left!</span>
+    </div>
+
+    <div class="popup-content popup-no-pad popup-no-scroll">
+
+        <div class="popup-content-side">
+            <video style="width:100%; height:100%;" autoplay muted loop>
+                <source src="https://assets.tribals.io/Subscription-Banner.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div v-if="!isPoki" class="subscription-content">
+            <div class="plus-tiers-container discount-content">
+                <h2>Get <span style="color:rgb(255, 223, 0)">1 Week of Tribals+</span> at <b style="color: green">50%</b> off!</h2>
+                <h3>Then auto-renews monthly at $12.99/M. Cancel anytime.</h3>
+            </div>
+            <ul class="subscription-list">
+                <li class="active">
+                    <i class="fa fa-remove"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="All the ads will removed from your experience!">No ads!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-server"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Special servers only for Tribals+ users">Premium Servers! (Transfers ENABLED)</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-paint-brush"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Unlock more Username Colors & Emojis based on your streak!">Change your Username Color & Emoji!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-bell"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Get private message on Discord and in-game chat when your base is being attacked!">Instant Inbox Notifications on base attack!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-users"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Tribals+ Party Owners parties stay across every Official Server!">Keep parties across servers!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-bolt"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Normal Respawning from 10 seconds to 5 seconds, Sleeping Bed from 300 seconds to 120 seconds.">Respawn Faster!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-user-plus"></i> Instantly join full servers!
+                </li>
+                <li class="active">
+                    <i class="fa fa-play"></i> Fast craft infinitely.
+                </li>
+            </ul>
+            <ul class="small-list">
+                <li><i class="fa fa-check"></i> Recruit up to 50 clan members</li>
+                <li><i class="fa fa-check"></i> Longer clan name slug (up to 6 characters!)</li>
+                <li><i class="fa fa-check"></i> Ignore up to 100 players in the chat</li>
+                <li><i class="fa fa-check"></i> Stand out more in chat: "<span data-tooltip="Tribals+ players' nickname appears in a special color along with a diamond emoji!" style="color: #00a6ed; opacity: 0.8;">💎 <b>{{profile.username || 'Nickname'}}<b/>:</span> Wow!"</li>
+                <li><i class="fa fa-check"></i> Change your voice pitch in voice chat</li>
+                <li><i class="fa fa-check"></i> And more Tribals+ membership benefits!</li>
+            </ul>
+        </div>
+
+        <div v-if="isPoki" class="subscription-content">
+            <br>
+            <p class="popup-info"><i class="fa fa-info-circle" aria-hidden="true"></i> This feature is not possible under Poki.com. Please visit Tribals.io directly to buy Tribals+.</p>
+        </div>
+    </div>
+
+    
+    <div class="popup-bottom-content align-fit">
+        <p style="width: 400px;">
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Questions? Join our <span style="color: #7289da;">Discord <img src="discord_icon.png" alt="Discord Icon" style="width: 10px; height: 10px;"></span></a>
+        </p>
+        <div class="price-container">
+            $1.49
+        </div>
+        <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="buyDiscountTribalsPlus(); setAction('buy_button');" class="btn-tribals btn-primary btn-gift-buy">
+            <i class="fa fa-check icon"></i>
+            <template v-if="!waitingForPayment">
+                GET
+            </template>
+            <template v-if="waitingForPayment">
+                Wait...
+            </template>
+        </button>
+    </div>
+</div>
+
+<div class="popup" v-if="popup.page == 'Campaign'">
+    <div class="popup-header">
+        <span class="title">Tribals+</span>
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="popup-content popup-no-pad popup-no-scroll">
+
+        <div class="popup-content-side">
+            <video style="width:100%; height:100%;" autoplay muted loop>
+                <source src="https://assets.tribals.io/Subscription-Banner.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="subscription-content">
+            <p class="popup-info"><i class="fa fa-info-circle" :style="{ 'margin-right': '4px' }" aria-hidden="true"></i> This is not a Subscription, it increases your Tribals+ streak by +1 month!</p>
+            <ul class="subscription-list" :style="{ 'margin': '-5px 0 10px 0' }">
+                <li class="active">
+                    <i class="fa fa-server"></i> Access to <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Special servers only for Tribals+ users">premium servers! (official server transfers enabled)</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-remove" class="hint--bottom hint--no-animate" aria-label="All the ads will removed from your experience!"></i> No ads!
+                </li>
+                <li class="active">
+                    <i class="fa fa-bell"></i> Get instant <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Get private message on Discord and in-game notification when your base is being attacked!">notifications</a> on base attack!
+                </li>
+                <li class="active">
+                    <i class="fa fa-bolt"></i> Faster respawn!
+                </li>
+                <li class="active">
+                    <i class="fa fa-user-plus"></i> Instantly join full servers!
+                </li>
+                <li class="active">
+                    <i class="fa fa-sort-amount-desc"></i> Sort items in storage with a click!
+                </li>   
+                <li class="active">
+                    <i class="fa fa-play"></i> Fast craft with no break! (90 seconds)
+                </li>
+            </ul>
+            <ul class="small-list" :style="{ 'margin': '-5px 0' }">
+                <li><i class="fa fa-check"></i> Recruit up to 50 clan members</li>
+                <li><i class="fa fa-check"></i> Longer clan name slug (up to 6 characters!)</li>
+                <li><i class="fa fa-check"></i> Ignore up to 100 players in the chat</li>
+                <li><i class="fa fa-check"></i> Stand out more in chat: "<span data-tooltip="Tribals+ players' nickname appears in a special color along with a diamond emoji!" style="color: #00a6ed; opacity: 1;">💎 <b>{{profile.username || 'Nickname'}}<b/>:</span> Wow!"</li>
+                <li><i class="fa fa-check"></i> Change your voice pitch in voice chat</li>
+                <li><i class="fa fa-check"></i> And more Tribals+ membership benefits!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="popup-bottom-content align-fit">
+        <p style="width: 400px;">
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Questions?</a></br>
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Join our <span style="color: #7289da;">Discord <img src="discord_icon.png" alt="Discord Icon" style="width: 10px; height: 10px;"></span></a>
+        </p>
+        <!-- <div class="dropdown-container">
+            <select id="payment-duration" v-model="selectedCampaignDuration" v-on:change="updateCampaignPrice">
+                <option value="1">1 Month</option>
+                <option value="2">2 Months</option>
+                <option value="3">3 Months (10% off)</option>
+                <option value="4">4 Months</option>
+                <option value="5">5 Months</option>
+                <option value="6">6 Months (15% off)</option>
+                <option value="7">7 Months</option>
+                <option value="8">8 Months</option>
+                <option value="9">9 Months</option>
+                <option value="10">10 Months</option>
+                <option value="11">11 Months</option>
+                <option value="12">12 Months (20% off)</option>
+            </select>
+        </div> -->
+        <div class="price-container">
+            ${{campaignPrice}}<small> for 1 month</small>
+        </div>
+        <button :disabled="waitingForPayment" v-on:click="buyCampaignTribalsPlus(); setAction('buy_button');" class="btn-tribals btn-primary btn-gift-buy btn-campaign-buy">
+            <i class="fa fa-check icon"></i>
+            <template v-if="!waitingForPayment">
+                GET TRIBALS+
+            </template>
+            <template v-if="waitingForPayment">
+                Wait...
+            </template>
+        </button>
+    </div>
+</div>
+
+<div class="popup" v-if="popup.page == 'DiscountFirstMonth'">
+    <div class="popup-header">
+        <span class="title">Tribals+</span>
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="popup-content popup-no-pad popup-no-scroll">
+
+        <div class="popup-content-side">
+            <video style="width:100%; height:100%;" autoplay muted loop>
+                <source src="https://assets.tribals.io/Subscription-Banner.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div v-if="!isPoki" class="subscription-content">
+            <div class="plus-tiers-container discount-content">
+                <h2>Get <span style="color:rgb(255, 223, 0)">1 Month of Tribals+</span> at <b style="color:rgb(255, 223, 0)">50%</b> off!</h2>
+                <h3>Then auto-renews monthly at $12.99/M. Cancel anytime.</h3>
+            </div>
+            <ul class="subscription-list">
+                <li class="active">
+                    <i class="fa fa-remove"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="All the ads will removed from your experience!">No ads!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-server"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Special servers only for Tribals+ users">Premium Servers! (Transfers ENABLED)</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-paint-brush"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Unlock more Username Colors & Emojis based on your streak!">Change your Username Color & Emoji!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-bell"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Get private message on Discord and in-game chat when your base is being attacked!">Instant Inbox Notifications on base attack!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-users"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Tribals+ Party Owners parties stay across every Official Server!">Keep parties across servers!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-bolt"></i> <a href="javascript:;" class="hint--bottom hint--no-animate" aria-label="Normal Respawning from 10 seconds to 5 seconds, Sleeping Bed from 300 seconds to 120 seconds.">Respawn Faster!</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-user-plus"></i> Instantly join full servers!
+                </li>
+                <li class="active">
+                    <i class="fa fa-play"></i> Fast craft infinitely.
+                </li>
+            </ul>
+            <ul class="small-list">
+                <li><i class="fa fa-check"></i> Recruit up to 50 clan members</li>
+                <li><i class="fa fa-check"></i> Longer clan name slug (up to 6 characters!)</li>
+                <li><i class="fa fa-check"></i> Ignore up to 100 players in the chat</li>
+                <li><i class="fa fa-check"></i> Stand out more in chat: "<span data-tooltip="Tribals+ players' nickname appears in a special color along with a diamond emoji!" style="color: #00a6ed; opacity: 1;">💎 <b>{{profile.username || 'Nickname'}}<b/>:</span> Wow!"</li>
+                <li><i class="fa fa-check"></i> Change your voice pitch in voice chat</li>
+                <li><i class="fa fa-check"></i> And more Tribals+ membership benefits!</li>
+            </ul>
+        </div>
+
+        <div v-if="isPoki" class="subscription-content">
+            <br>
+            <p class="popup-info"><i class="fa fa-info-circle" aria-hidden="true"></i> This feature is not possible under Poki.com. Please visit Tribals.io directly to buy Tribals+.</p>
+        </div>
+    </div>
+
+    
+    <div class="popup-bottom-content align-fit">
+        <p style="width: 400px;">
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Questions?</a></br>
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Join our <span style="color: #7289da;">Discord <img src="discord_icon.png" alt="Discord Icon" style="width: 10px; height: 10px;"></span></a>
+        </p>
+        <!-- <div class="checkbox-container">
+            <input type="checkbox" id="save-offer" v-model="checkboxChecked" v-on:change="checkSelection">
+            <label for="save-offer">Get 3 months</br>Save 33%</label>
+        </div> -->
+        <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="popup.page = 'Gifting'" class="btn btn-tribals btn-gift">
+            <template v-if="!waitingForPayment">
+                <span aria-hidden="true">🎁</span> Gift
+            </template>
+            <template v-if="waitingForPayment">
+                Redirecting...
+            </template>
+        </button>
+        <div class="price-container">
+            ${{price}}<small>/Month</small>
+        </div>
+        <button v-if="!isPoki" :disabled="waitingForPayment" v-on:click="buyDiscountTribalsPlus(); setAction('buy_button_discount');" class="btn-tribals btn-primary btn-gift-buy">
+            <i class="fa fa-check icon"></i>
+            <template v-if="!waitingForPayment">
+                GET
+            </template>
+            <template v-if="waitingForPayment">
+                Wait...
+            </template>
+        </button>
+    </div>
+</div>
+
+<div class="popup popupConfirmation" v-if="popup.page == 'TPlusConfirmation'" style="padding-bottom: 66px; height: auto;">
+    <div class="popup-header">
+        <span class="title" style="padding-left: 0;">💎 THANK YOU FOR PURCHASING A TRIBALS+ SUBSCRIPTION! 💎</span>
+        <a v-on:click="closePopup()" href="javascript:;" class="popup-close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </div>
+    <div class="popup-content-center popup-no-pad popup-no-scroll">
+        <h1 style="margin: 40px 0 0 0; text-transform: uppercase; font-size: 32px;">Your <b style="color: #ffdf00;">Tribals+</b> membership is now active!</h1>
+        
+        <div v-if="!isPoki" class="subscription-content" style="width: 100%; text-align: left; float: left; border-top: 2px solid #333333; padding: 10px 20px 0 20px; margin-top: 30px;">
+            <h2 style="margin: 20px 0; font-size: 24px;">Enjoy the following benefits:</h2>
+            <ul class="subscription-list" style="margin-bottom: 40px;">
+                <li class="active">
+                    <i class="fa fa-server"></i> You now have access to <span style="color: rgb(255, 223, 0);">Tribals+ Only Servers, transfers to Official Servers is enabled!</span><button v-on:click="goToTPlusServers()" class="benefit-link"><i class="fa fa-link"></i>Take me there!</button> 
+                </li>
+                <li class="active">
+                    <i class="fa fa-bell"></i> Get <span style="color: rgb(255, 223, 0);">instant notifications </span> when your base is attacked as a <span style="color: rgb(255, 223, 0);">Discord DM & Chat Message In-Game! </span> <button v-on:click="connectDiscord()" v-if="!isDiscordConnected" class="benefit-link"><img :src="getImage('Discord-Icon.png')">Connect Discord!</button> 
+                </li>
+                <li class="active">
+                    <i class="fa fa-ban"></i> <span style="color: rgb(255, 223, 0);">No more Ads!</span>
+                </li>
+                <li class="active">
+                    <i class="fa fa-user-plus"></i> Instantly join full servers</a>!
+                </li>
+                <li class="active">
+                    <i class="fa fa-diamond"></i> You now <span style="color: rgb(255, 223, 0);">stand out more in chat:</span> <span style="color: #00a6ed; opacity: 1; margin-left: 0;">💎 {{profile.username || 'Nickname'}}:</span> Wow!
+                </li>
+                <li class="active">
+                    <i class="fa fa-fast-forward"></i> You can now <span style="color: rgb(255, 223, 0);">Fast Craft</span> whenever you want <span style="color: rgb(255, 223, 0);">without ads!</span>
+                </li>
+                <li class="active">
+                    <i class="fa fa-sort-amount-desc"></i> You now have a button to instantly sort chests from A-Z!
+                </li>
+                
+                <li class="active">
+                    <i class="fa fa-check"></i> And more <a href="https://wiki.tribals.io/tribals.io-wiki/tribals+" target="_blank" style="color: rgb(255, 223, 0);" data-tooltip="Tribals Wiki - Tribals+ Benefits page">Tribals+ benefits...</a> <a class="benefit-link" target="_blank" href="https://wiki.tribals.io/tribals.io-wiki/tribals+"><i class="fa fa-link"></i>See full list</a> 
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div class="popup-bottom-content align-fit">
+        <p style="width: 300px;">
+            <a href="https://discord.gg/tribals-874358425004429334" target="_blank">Questions? Join our <span style="color: #7289da;">Discord <img src="discord_icon.png" alt="Discord Icon" style="width: 10px; height: 10px;"></span></a>
+        </p>
+        <p class="confirmation-buttons" style="display: flex; align-items: center;">
+            <span> You can gift a Tribals+ membership to a friend </span>
+            <button v-on:click="popup.page = 'Gifting'" class="btn btn-gift">
+                <span aria-hidden="true">🎁 Gift</span>
+            </button>
+            <button v-on:click="closePopup(); popup.page === 'None'" class="btn btn-primary">
+                <span aria-hidden="true">✅ Okay thanks!</span>
+            </button>
+
+        </p>
+     </div>
+</div>
