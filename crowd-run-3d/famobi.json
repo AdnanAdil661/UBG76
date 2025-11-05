@@ -1,0 +1,100 @@
+{
+    "features": {
+        "highscores": 1,
+        "rewarded": 1
+    },
+    "game_i18n" : {
+        "default": {
+            "filename.png"  : "fg_i18n/en/images/filename.png"
+        }
+    },
+    "game_info": {
+        "client_version": "1.0.9", 
+        "api_version": "2.0",
+        "forced_mode": {
+            "state": {
+                  "level": {
+                    "description": "The current level",
+                    "type": "number",
+                    "min": 1,
+                    "max": 99998
+                }
+            },
+            "override": {
+                "crowd_speed": {
+                    "description": "sets the speed of the crowd: 2 is normal speed, 1 slower, 3 faster",
+                    "type": "number",
+                    "min": "1",
+                    "max": "3"
+                },
+                "crowd_startSize": {
+                    "description": "Sets the start size of the crowd.",
+                    "type": "number",
+                    "min": "1",
+                    "max": "250"
+                },
+                "endless_mode": {
+                    "description": "Sets whether the level is Endless or not.",
+                    "type": "boolean"
+                },
+                "hide_ui": {
+                    "description": "Used to hide parts of the ui. If the argument is left empty, no elements should be hidden.",
+                    "type": "array",
+                    "values": ["title", "progressBar", "finishScreen"]
+                },
+                "hasTraps": {
+                    "description": "Indicates if the level has traps/obstacles.",
+                    "type": "boolean"
+                },
+                "hasCloningGates": {
+                    "description": "Indicates if the level has cloning gates.",
+                    "type": "boolean"
+                },
+                "hasEnemyCrowds": {
+                    "description": "Indicates if the level has enemy crowds.",
+                    "type": "boolean"
+                },
+                "crowdFinalSize": {
+                    "description": "Sets the minimum amount the crowd needs to have in order to fire the LEVEL_SUCCESS event. If this minimum is not reached, as LEVEL_FAIL should be sent.",
+                    "type": "number",
+                    "min": "0"
+                },
+                "sensitivity": {
+                    "description": "Touch sensitivity. Default value is 2",
+                    "type": "number",
+                    "min": "1",
+                    "max": "10"
+                }
+            }
+        },
+        "track_stats": {
+            "crowd_current_amount" : {
+                "description": "Fires when the crowd gets hit by any kind of obstacle or when using a cloning gate or when reaching the goal. Tracks the current number of characters in the crowd.",
+                "type": "number"
+            },
+            "obstacle_hit" : {
+                "description": "Fires when the crowd gets hit by any kind of obstacle. It tracks by what obstacle the crowd got hit.",
+                "type": "string"
+            },
+            "characters_died" : {
+                "description": "The number of characters died in total during the level. Sent every time a character dies.",
+                "type": "number"
+            },
+            "battles:won" : {
+                "description": "The number of battles won during the level. Sent every time a battle is won.",
+                "type": "number"
+            }
+        },
+        "orientation": {
+            "phone": {
+                "portrait": "green",
+                "landscape": "green"
+            },
+            "tablet": {
+                "portrait": "green",
+                "landscape": "green"
+            }
+        }
+    }
+
+}
