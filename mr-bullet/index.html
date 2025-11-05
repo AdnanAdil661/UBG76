@@ -1,0 +1,523 @@
+<!-- 1745576192869 -->
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <script src="./patch/cloner-v2.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MrBullet</title>
+    <style>
+      .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
+      textarea.emscripten { font-family: monospace; display: inline; width: 100%}
+      div.emscripten { margin-left: 0px; text-align: center; }
+      /*
+      div.emscripten_border { margin-left: 0px; border: 1px solid black; }
+      */
+      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+      canvas.emscripten { border: 0px none; background-color: black; }
+
+      @-webkit-keyframes rotation {
+        from {-webkit-transform: rotate(0deg);}
+        to {-webkit-transform: rotate(360deg);}
+      }
+      @-moz-keyframes rotation {
+        from {-moz-transform: rotate(0deg);}
+        to {-moz-transform: rotate(360deg);}
+      }
+      @-o-keyframes rotation {
+        from {-o-transform: rotate(0deg);}
+        to {-o-transform: rotate(360deg);}
+      }
+      @keyframes rotation {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+      }
+
+      body > .emscripten { display: none; }
+
+    </style>
+    <script src="./patch/poki/sdk-v2.js?//game-cdn.poki.com/scripts/v2/poki-sdk.js"></script>
+    <script src="howler.core.min.js"></script>
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.core.min.js"></script>
+    -->
+  </head>
+  <body style= "margin: 0px; padding: 0px; overflow: hidden;">
+    <!--
+    <div class="emscripten_border" id="game-container">
+      <div class="emscripten" id="status">Downloading...</div>
+      <div class="emscripten">
+        <progress value="0" max="100" id="progress" hidden=1></progress>  
+      </div>
+      <canvas class="emscripten" id="canvas"  oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+    </div>
+    <div class="emscripten">
+      <input type="checkbox" id="resize">Resize canvas
+      <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
+      &nbsp;&nbsp;&nbsp;
+      <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, 
+                                                                                document.getElementById('resize').checked)">
+      |
+      <input type="button" value="Pause" onclick="Module.ccall('axmol_director_pause')">
+      <input type="button" value="Resume" onclick="Module.ccall('axmol_director_resume')">
+      <input type="button" value="Step" onclick="Module.ccall('axmol_director_step')">
+    </div>
+    
+    <div class="emscripten">
+      <textarea class="emscripten" id="output" rows="8"></textarea>
+    </div>
+    -->
+
+    <script type='text/javascript'>
+      var statusElement = document.getElementById('status');
+      var progressElement = document.getElementById('progress');
+      
+      var hierarchyElement = document.getElementById('hierarchy');
+      var nodeProperties = [];
+      for(var i = 0; i < 20; i++) {
+        nodeProperties[i] = document.getElementById('nodeProperty' + i);
+      }
+      var gameLoadingFinished = false;
+      var Module = {
+        preInit: [],
+        preRun: [],
+        postRun: [],
+        print: (function() {
+          // #region axmol-spec
+          var escapeDeep = 0;
+          var stashedEscape = null;
+          // #endregion axmol-spec
+          var element = document.getElementById('output');
+          if (element) element.value = ''; // clear browser cache
+          return function(text) {
+            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+            // These replacements are necessary if you render to raw HTML
+            //text = text.replace(/&/g, "&amp;");
+            //text = text.replace(/</g, "&lt;");
+            //text = text.replace(/>/g, "&gt;");
+            //text = text.replace('\n', '<br>', 'g');
+
+            // #region axmol-spec
+            var curEscape = null;
+            var escapeList = text.match(/\x1b\[(\d{2})?m/g);
+            if(escapeList != null) {
+              for(var i = 0; i < escapeList.length; ++i) {
+                var escape = escapeList[i];
+                if (escape !== "\x1b[m") {
+                  curEscape = escape;
+                  ++escapeDeep;
+                } else {
+                  --escapeDeep;
+                }
+              }
+            }
+            if (escapeDeep > 0) { // still in escape
+              if (stashedEscape != null) { // check stashedEscape
+                if(text.startsWith("\x1b[m")) {
+                  text = text.substring(3);
+                }
+                if (!text.startsWith("\x1b[")) { // due to end color removed, it's must start color or not.
+                  text = stashedEscape + text;
+                }
+              }
+
+              if(curEscape) {
+                // store this text last escape
+                stashedEscape = curEscape;
+              }
+            } else {
+              stashedEscape = null;
+            }
+            /* trim end: (\n)?\x1b[m */
+            if(text.endsWith("\n\x1b[m")) {
+              text = text.substring(0, text.length - 4);
+            }
+            else if(text.endsWith("\x1b[m")) {
+              text = text.substring(0, text.length - 3);
+            }
+            // #endregion axmol-spec
+
+            console.log(text);
+            if (element) {
+              element.value += text.replace(/\x1b\[(\d{2})?m/g, '') + "\n"; // axmol-mod: strip ansi color
+              element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+        })(),
+        printErr: function(text) {
+          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+          console.error(text);
+        },
+        canvas: (function() {
+          var canvas = document.getElementById('canvas');
+          if (!canvas) return;
+
+          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+          // application robust, you may want to override this behavior before shipping!
+          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+
+          return canvas;
+        })(),
+        setStatus: function(text) {
+          if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+          if (text === Module.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          statusElement = document.getElementById('progress-comment');
+          if (m) {
+            text = m[1];
+            var h = document.getElementById('progress-fill');
+            var mEl = document.getElementById('progress-amount');
+            var n = parseInt(m[2])/parseInt(m[4]);
+            var e = 100 * n;
+            h.style.width = ''.concat(e, '%');
+            mEl.innerHTML = ''.concat(e << 0, '%');
+            /*
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+            */
+          } else {
+            /*
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+            */
+          }
+          if (statusElement)
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          /*
+          if (left==0 && !gameLoadingFinished) {
+            gameLoadingFinished = true;
+            PokiSDK.gameLoadingFinished();
+          }
+          */
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+      Module.setStatus('Downloading...');
+      window.onerror = function() {
+        Module.setStatus('Exception thrown, see JavaScript console');
+        /*
+        Module.setStatus = function(text) {
+          if (text) Module.printErr('[post-exception status] ' + text);
+        };
+        */
+      };
+    </script>
+    <script type='text/javascript'>
+      Module.preRun.push(function() {
+        addRunDependency('sync_writable_path')
+        FS.mkdir('/axmolPersistPath')
+        FS.mount(IDBFS, {}, '/axmolPersistPath')
+        FS.syncfs(true, function (err) {
+          if (err) {
+            throw err
+          }
+          removeRunDependency('sync_writable_path')
+        })
+        // #region axmol-spec, enable output as-is to console without split by \n
+        TTY.stream_ops.write = function(stream, buffer, offset, length, pos) {
+          var tty = stream.tty;
+          if (!tty || !tty.ops.put_char) {
+            throw new FS.ErrnoError(60);
+          }
+          try {
+            for (var i = 0; i < length; i++) {
+              var val = buffer[offset+i];
+              if (val === null) {
+                continue;
+              } else {
+                if (val != 0) tty.output.push(val); // val == 0 would cut text output off in the middle.
+              }
+            }
+          } catch (e) {
+            throw new FS.ErrnoError(29);
+          }
+          out(UTF8ArrayToString(tty.output, 0));
+          tty.output = [];
+          if (length) {
+            stream.node.timestamp = Date.now();
+          }
+          return i;
+        }
+        //  #endregion axmol-spec
+      })
+    </script>
+    <script>
+(() => {
+  window.delay = (()=>{
+    var timer = {};
+      return function(callback, ms, key){
+      if (key in timer) clearTimeout (timer[key]);
+      timer[key] = setTimeout(callback, ms);
+    };
+  })();
+  // decompress brotli via wasm
+  if (false) {
+    Module.instantiateWasm = function(info, receiveInstance) {
+      // console.log('instantiateWasm');
+      var f = "mrbullet_android.wasm";
+      var xhr = new XMLHttpRequest;
+      xhr.open("GET", f, true);
+      xhr.responseType = "arraybuffer";
+      xhr.onprogress = function(event) {
+          if (Module["setStatus"]) Module["setStatus"](`Preparing... (${event.loaded}/${event.total})`)
+      };
+      xhr.onerror = function(event) {
+          throw new Error("NetworkError for: " + packageName)
+      };
+      xhr.onload = function(event) {
+          if (xhr.status == 200 || xhr.status == 304 || xhr.status == 206 || xhr.status == 0 && xhr.response) {
+            var compressedData = new Uint8Array(xhr.response)
+            // console.log({f, wasmBinary, compressedData});
+            var timer = setInterval(() => {
+              if (!('brotli' in window)) return;
+              clearInterval(timer);
+              setTimeout(() => {
+                var binary = window.brotli.decompress(compressedData);
+                function receiveInstantiationResult(result) {
+                    receiveInstance(result["instance"])
+                }
+                WebAssembly.instantiate(binary, info).then(receiveInstantiationResult, reason => {
+                    err(`failed to asynchronously prepare wasm: ${reason}`);
+                    abort(reason)
+                })
+              }, 500);
+            }, 500);
+          } else {
+              throw new Error(xhr.statusText + " : " + xhr.responseURL)
+          }
+      };
+      xhr.send(null)
+      /*
+      fetch(f, {
+          credentials: "same-origin"
+      }).then(response => {
+          if (!response["ok"]) {
+              throw `failed to load wasm binary file at '${f}'`
+          }
+          return response["arrayBuffer"]()
+      }).then((wasmBinary) => {
+        var compressedData = new Uint8Array(wasmBinary)
+        // console.log({f, wasmBinary, compressedData});
+        var timer = setInterval(() => {
+          if (!('brotli' in window)) return;
+          clearInterval(timer);
+          setTimeout(() => {
+            var binary = window.brotli.decompress(compressedData);
+            function receiveInstantiationResult(result) {
+                receiveInstance(result["instance"])
+            }
+            WebAssembly.instantiate(binary, info).then(receiveInstantiationResult, reason => {
+                err(`failed to asynchronously prepare wasm: ${reason}`);
+                abort(reason)
+            })
+          }, 500);
+        }, 500);
+      })
+      */
+    };
+    window.fetchRemotePackageBrotli = function(fetchRemotePackage, packageName, packageSize, callback, errback) {
+      var f = "mrbullet_android.data";
+      var xhr = new XMLHttpRequest;
+      xhr.open("GET", f, true);
+      xhr.responseType = "arraybuffer";
+      xhr.onprogress = function(event) {
+          if (Module["setStatus"]) Module["setStatus"](`Downloading data... (${event.loaded}/${event.total})`)
+      };
+      xhr.onerror = function(event) {
+          throw new Error("NetworkError for: " + packageName)
+      };
+      xhr.onload = function(event) {
+          if (xhr.status == 200 || xhr.status == 304 || xhr.status == 206 || xhr.status == 0 && xhr.response) {
+            var compressedData = new Uint8Array(xhr.response)
+            // console.log({f, wasmBinary, compressedData});
+            var timer = setInterval(() => {
+              if (!('brotli' in window)) return;
+              clearInterval(timer);
+              setTimeout(() => {
+                var binary = window.brotli.decompress(compressedData);
+                var url = window.URL.createObjectURL( (new Blob([ binary ]) ) );
+                fetchRemotePackage(url, packageSize, callback, errback);
+              }, 500);
+            }, 500);
+
+          } else {
+              throw new Error(xhr.statusText + " : " + xhr.responseURL)
+          }
+      };
+      xhr.send(null)
+      /*
+      fetch(f, {
+          credentials: "same-origin"
+      }).then(response => {
+          if (!response["ok"]) {
+              throw `failed to load wasm binary file at '${f}'`
+          }
+          return response["arrayBuffer"]()
+      }).then((wasmBinary) => {
+        var compressedData = new Uint8Array(wasmBinary)
+        // console.log({f, wasmBinary, compressedData});
+        var timer = setInterval(() => {
+          if (!('brotli' in window)) return;
+          clearInterval(timer);
+          setTimeout(() => {
+            var binary = window.brotli.decompress(compressedData);
+            var url = window.URL.createObjectURL( (new Blob([ binary ]) ) );
+            fetchRemotePackage(url, packageSize, callback, errback);
+          }, 500);
+        }, 500);
+      })
+      */
+    };
+  }
+
+  // https://game-cdn.poki.com/loaders/v3/unity-2020.js
+  window.getCanvasSize = () => {
+    var n = window.innerWidth,
+    e = window.innerHeight,
+    t = n / e;
+    var d = document.getElementById('game-container');
+    d.style.width = ''.concat(n, 'px'),
+    d.style.height = ''.concat(e, 'px'),
+    maxRatio = 16/9,
+    minRatio = 9/16,
+    t > maxRatio ? d.style.width = ''.concat(e * maxRatio, 'px') : t < minRatio &&
+    (d.style.height = ''.concat(n / minRatio, 'px'));
+    var i = d.getBoundingClientRect();
+    d.style.marginLeft = ''.concat( - 0.5 * i.width, 'px'),
+    d.style.marginTop = ''.concat( - 0.5 * i.height, 'px')
+    var canvasSize = {width: parseInt(d.style.width), height: parseInt(d.style.height)};
+    return canvasSize;
+  };
+  window.resizeCanvas = () => {
+    var canvasSize = window.getCanvasSize();
+    // console.log({canvasSize});
+    // use delay, to prevent reduce call when resize
+    if (canvasSize.width==0 || canvasSize.height==0) return;
+    if (Module.canvas.width==canvasSize.width && Module.canvas.height==canvasSize.height) return;
+    window.delay(() => {
+      // console.log(['Module.setCanvasSize', {canvasSize}]);
+      Module.setCanvasSize(canvasSize.width, canvasSize.height);
+      // retry if expected canvas size not match after setCanvasSize
+      setTimeout(() => {
+        // console.log('check Module.canvas.width');
+        if (Module.canvas.width==canvasSize.width && Module.canvas.height==canvasSize.height) return;
+        // console.log('retry window.resizeCanvas');
+        window.resizeCanvas();
+      }, 1000);
+    }, 1000, 'setCanvasSize');
+  };
+  /*
+  var timer = setInterval(() => {
+    if (!('setCanvasSize' in Module)) return;
+    if (!('canvas' in Module)) return;
+    clearInterval(timer);
+    setTimeout(() => {
+    }, 500);
+  }, 500);
+  */
+  /*
+  document.addEventListener('click', ()=>{window.firstClick=true;}, {once:true});
+  */
+  var unlock = function(e) {
+    window.firstClick=true;
+    document.removeEventListener('touchstart', unlock, true);
+    document.removeEventListener('touchend', unlock, true);
+    document.removeEventListener('click', unlock, true);
+    document.removeEventListener('keydown', unlock, true);
+  };
+  document.addEventListener('touchstart', unlock, true);
+  document.addEventListener('touchend', unlock, true);
+  document.addEventListener('click', unlock, true);
+  document.addEventListener('keydown', unlock, true);
+  Module.postRun.push(function() {
+    window.resizeCanvas();
+    var d = document.getElementById('game-container');
+    d.style.position = 'absolute';
+    d.style.top = '50%';
+    d.style.left = '50%';
+    window.resizeCanvas();
+    window.addEventListener('resize', window.resizeCanvas),
+    window.addEventListener('focus', window.resizeCanvas);
+  });
+  /*
+  (async()=>{
+    window.catalog = await (await (fetch("Resources/catalog.json"))).json();
+  })();
+  */
+})();
+
+    </script>
+    <!--
+    <script type="module">
+import init, * as brotliDecWasm from "./brotli_dec_wasm.js";
+export default init().then(() => { window.brotli = brotliDecWasm });
+    </script>
+    -->
+    <!--
+    <script async type="text/javascript" src="mrbullet_android.js"></script>
+    -->
+    <!-- poki loader -->
+    <script>
+  var buildUrl = 'Build';
+  window.config = {
+    loader: 'axmol',
+    debug: false,
+    maxRatio: 16 / 9,
+    minRatio: 9 / 16,
+
+    title: 'MrBullet',
+
+    thumbnail: 'thumbnail.jpg',
+    numScreenshots: 4,
+
+    metadata:{
+      "poki_template_version": 1,
+      "extra_html": {
+        "head": [
+          "<!-- will be copied to the resulting head //-->"
+        ],
+        "body": [
+          "<!-- will be copied to the resulting body //-->",
+          "<!-- will also be copied to the resulting body //-->"
+        ]
+      },
+      "background_color": "#000000",
+      "background_filename": "",
+      "code_filename": "mrbullet_android.wasm",
+      "company_name": "",
+      "data_filename": "mrbullet_android.data",
+      "decompression_fallback": "",
+      "development_player": "false",
+      "framework_filename": "",
+      "height": "600",
+      "loader_filename": "mrbullet_android.js",
+      "memory_filename": "",
+      "product_name": "MrBullet",
+      "product_version": "1.2.4",
+      "splash_screen_style": "Dark",
+      "symbols_filename": "",
+      "total_memory": "",
+      "unity_version": "",
+      "use_data_caching": "true",
+      "use_threads": "false",
+      "use_wasm": "true",
+      "use_webgl_1_0": "true",
+      "use_webgl_2_0": "true",
+      "width": "960"
+    }
+  };
+  </script>
+  <script src="loader.js"></script>
+  </body>
+</html>
