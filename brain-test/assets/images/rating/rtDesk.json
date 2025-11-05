@@ -1,0 +1,27 @@
+﻿{"frames": {
+
+"Плашка instance 10000":
+{
+	"frame": {"x":0,"y":0,"w":513,"h":803},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":513,"h":803},
+	"sourceSize": {"w":513,"h":803}
+},
+"Плашка instance 10001":
+{
+	"frame": {"x":0,"y":803,"w":512,"h":803},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":513,"h":803},
+	"sourceSize": {"w":513,"h":803}
+}},
+"meta": {
+	"app": "Adobe Animate",
+	"version": "18.0.1.115",
+	"image": "Rating.png",
+	"format": "RGBA8888",
+	"size": {"w":1024,"h":2048},
+	"scale": "1"
+}
+}

@@ -1,0 +1,107 @@
+﻿{"frames": {
+
+"premium0000":
+{
+	"frame": {"x":0,"y":0,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0001":
+{
+	"frame": {"x":123,"y":0,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0002":
+{
+	"frame": {"x":0,"y":83,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0003":
+{
+	"frame": {"x":123,"y":83,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0004":
+{
+	"frame": {"x":0,"y":166,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0005":
+{
+	"frame": {"x":123,"y":166,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0006":
+{
+	"frame": {"x":0,"y":249,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0007":
+{
+	"frame": {"x":123,"y":249,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0008":
+{
+	"frame": {"x":0,"y":332,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0009":
+{
+	"frame": {"x":123,"y":332,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0010":
+{
+	"frame": {"x":0,"y":415,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+},
+"premium0011":
+{
+	"frame": {"x":0,"y":0,"w":123,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":83},
+	"sourceSize": {"w":123,"h":83}
+}},
+"meta": {
+	"app": "Adobe Animate",
+	"version": "18.0.1.115",
+	"image": "MapMenu.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":512},
+	"scale": "1"
+}
+}

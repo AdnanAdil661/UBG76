@@ -1,0 +1,27 @@
+{"frames": {
+
+"1.png":
+{
+	"frame": {"x":0,"y":0,"w":43,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":43,"h":40},
+	"sourceSize": {"w":43,"h":40}
+},
+"2.png":
+{
+	"frame": {"x":0,"y":40,"w":43,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":43,"h":40},
+	"sourceSize": {"w":43,"h":40}
+}
+}, 
+"meta": {
+	"app": "http://www.texturepacker.com",
+	"version": "1.0",
+	"image": "heartMenu.png",
+	"format": "RGBA8888",
+	"size": {"w":43,"h":80}
+}
+}
