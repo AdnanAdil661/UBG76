@@ -1,0 +1,13 @@
+{
+"companyName": "MotionVolt Games Ltd",
+"productName": "Backflipper",
+"dataUrl": "backflipper.data.unityweb?v=1",
+"asmCodeUrl": "backflipper.asm.code.unityweb?v=1",
+"asmMemoryUrl": "backflipper.asm.memory.unityweb?v=1",
+"asmFrameworkUrl": "backflipper.asm.framework.unityweb?v=1",
+"TOTAL_MEMORY": 536870912,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Light",
+"backgroundColor": "#828080"
+}
