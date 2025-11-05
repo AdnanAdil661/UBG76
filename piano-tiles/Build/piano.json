@@ -1,0 +1,17 @@
+{
+"companyName": "Android University",
+"productName": "Candy Piano Tiles",
+"dataUrl": "piano.data.unityweb",
+"wasmCodeUrl": "piano.wasm.code.unityweb",
+"wasmFrameworkUrl": "piano.wasm.framework.unityweb",
+"asmCodeUrl": "piano.asm.code.unityweb",
+"asmMemoryUrl": "piano.asm.memory.unityweb",
+"asmFrameworkUrl": "piano.asm.framework.unityweb",
+"TOTAL_MEMORY": 268435456,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"backgroundUrl": "piano.jpg",
+"splashScreenStyle": "Light",
+"backgroundColor": "#FFFFFF",
+"cacheControl": {"dataUrl": "must-revalidate"}
+}
