@@ -1,0 +1,23 @@
+{
+  "short_name": "Hole.io",
+  "name": "Hole.io",
+  "icons": [
+    {
+      "src": "https://img.gamedistribution.com/bf10577cd0644646a2a0152fe3b4d586-512x512.jpeg",
+      "type": "image/jpeg",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "https://img.gamedistribution.com/bf10577cd0644646a2a0152fe3b4d586-512x512.jpeg",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/bf10577cd0644646a2a0152fe3b4d586/index.html",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "/bf10577cd0644646a2a0152fe3b4d586/",
+  "theme_color": "#3367D6"
+}

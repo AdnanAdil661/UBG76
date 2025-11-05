@@ -1,0 +1,32 @@
+<!-- 1745489358862 -->
+<!doctype html>
+<html>
+<head>
+    <script src="./patch/cloner-v2.js"></script>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover' />
+    <meta charset='utf-8'>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <style></style>
+    <title>Hoop Royale</title>
+    <script>
+      window.famobi_gameID = "hoop-royale";
+      window.famobi_gameJS = ['js/all.js',
+
+        function() {
+          // famobi_tracking.init('hoop-royale', null, 1, true, true);
+        }
+      ];
+
+      (function (document, url, fgJS, firstJS) {
+        fgJS = document.createElement('script');
+        firstJS = document.getElementsByTagName('script')[0];
+        fgJS.src = url + encodeURIComponent(document.location.href);
+        firstJS.parentNode.insertBefore(fgJS, firstJS);
+      })(document, './gameapi/v1.js?e=');
+    </script>
+</head>
+<body style= "margin: 0px; padding: 0px; overflow: hidden;">
+
+<div id="more_g" style="position:absolute;top:0;right:0;z-index:1000"><a href="https://igroutka.ru/?utm_source=game_loader" target="_blank" title="Игроутка - бесплатные онлайн игры"><img src="https://m.igroutka.ru/files/img/logo-mini.png" width="180" height="47" alt="Игроутка - бесплатные онлайн игры" /></a></div><a id="game_lock" style="display:none;position:absolute;top:0;right:0;left:0;bottom:0;width:100%;height:100%;z-index:999;" href="https://igroutka.ru/?utm_source=game_lock" target="_blank"></a><script src="https://m.igroutka.ru/files/scripts/script.js"></script></body>
+</html>
