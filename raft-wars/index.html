@@ -1,0 +1,95 @@
+<!-- 1746793180130 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./patch/cloner-v23.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raft Wars</title>
+	
+	<link rel="canonical" href="https://freezenova.ubg235.com/?raft-wars.html" />
+	<script src="./patch/freezenova/unblocked-gm.js?/games/unblocked-gm.js"></script>
+	
+	<style>
+        
+    html, body{
+        margin: 0;
+        padding: 0;
+
+        min-width: 100%;
+        width: 100%;
+        max-width: 100%;
+
+        min-height: 100%;
+        height: 100%;
+        max-height: 100%;
+    }
+
+    body {
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        vertical-align: middle;
+        justify-content: center;
+        height: 100vh;
+	}
+
+    #container{
+        width: 700px;
+        height: 500px;
+    }
+
+</style>
+	
+</head>
+<body style="margin:0px; padding:0px; overflow:hidden;" onfocus="FitScreen();" onload="FitScreen();" onresize="FitScreen();">
+    <div id="container"></div>
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        
+        window.addEventListener("load", (event) => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            player.style.width = "100%";
+            player.style.height = "100%";
+
+            const container = document.getElementById("container");
+            container.appendChild(player);
+
+            player.addEventListener('loadedmetadata', () => {
+                console.info(player.metadata.isActionScript3);
+            })
+
+            player.load("game.swf").then(() => {
+                console.info("Ruffle successfully loaded the file");
+                FitScreen();
+            }).catch((e) => {
+                console.error(`Ruffle failed to load the file: ${e}`);
+            });
+        });
+
+        
+        function FitScreen(){
+            var w = 700;
+            var h = 500;
+
+            var availWidth = window.innerWidth;
+            var availHeight = window.innerHeight;
+
+            var width, height;
+
+            if (availWidth / availHeight > w / h) {
+                height = availHeight;
+                width = (height * w / h);
+            } else {
+                width = availWidth;
+                height = (width * h / w);
+            }
+
+            document.getElementById("container").style.width = width + "px";
+            document.getElementById("container").style.height = height + "px";
+        }
+    </script>
+    <script src="./patch/ruffle/ruffle.js?/games/2024/ruffle/ruffle.js"></script>
+</body>
+</html>
