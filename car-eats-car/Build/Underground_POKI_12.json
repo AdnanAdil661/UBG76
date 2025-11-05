@@ -1,0 +1,12 @@
+{
+"companyName": "Smokoko",
+"productName": "Car Eats Car: Dungeon Adventure POKI",
+"dataUrl": "Underground_POKI_12.data.unityweb",
+"wasmCodeUrl": "Underground_POKI_12.wasm.code.unityweb",
+"wasmFrameworkUrl": "Underground_POKI_12.wasm.framework.unityweb",
+"TOTAL_MEMORY": 268435456,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}

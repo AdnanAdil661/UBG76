@@ -1,0 +1,10 @@
+window.screenOrientation = "sensor_landscape",
+loadLib("libs/laya.core.js"),
+loadLib("libs/laya.html.js"),
+loadLib("libs/laya.ui.js"),
+loadLib("libs/laya.d3.js"),
+loadLib("libs/min/fairygui.min.js"),
+loadLib("libs/laya.physics3D.js"),
+"undefined" != typeof wx && loadLib("js/uma.min.js"),
+loadLib("js/cannon-es.js"),
+loadLib("js/main.js");
