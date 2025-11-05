@@ -1,0 +1,1523 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "assets/images/extra/_next_stage_icon.png",
+                "frameConfig": {
+                    "frameWidth": 149,
+                    "frameHeight": 152,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "_next_stage_icon"
+            },
+            {
+                "url": "assets/images/tutorials/1.png",
+                "type": "image",
+                "key": "1"
+            },
+            {
+                "url": "assets/images/tutorials/2.png",
+                "type": "image",
+                "key": "2"
+            },
+            {
+                "url": "assets/images/tutorials/3.png",
+                "type": "image",
+                "key": "3"
+            },
+            {
+                "url": "assets/images/tutorials/4.png",
+                "type": "image",
+                "key": "4"
+            },
+            {
+                "url": "assets/images/tutorials/5.png",
+                "type": "image",
+                "key": "5"
+            },
+            {
+                "url": "assets/images/tutorials/6.png",
+                "type": "image",
+                "key": "6"
+            },
+            {
+                "url": "assets/images/tutorials/7.png",
+                "type": "image",
+                "key": "7"
+            },
+            {
+                "url": "assets/images/tutorials/8.png",
+                "type": "image",
+                "key": "8"
+            },
+            {
+                "url": "assets/images/tutorials/9.png",
+                "type": "image",
+                "key": "9"
+            },
+            {
+                "url": "assets/images/animations.json",
+                "type": "animation",
+                "key": "animations"
+            },
+            {
+                "url": "assets/images/cards/archer_card.png",
+                "type": "image",
+                "key": "archer_card"
+            },
+            {
+                "url": [
+                    "assets/components/ArmorGames.js"
+                ],
+                "type": "scripts",
+                "key": "ArmorGames"
+            },
+            {
+                "url": "assets/armorgames_logo.png",
+                "type": "image",
+                "key": "armorgames_logo"
+            },
+            {
+                "url": "assets/images/extra/arrow.png",
+                "type": "image",
+                "key": "arrow"
+            },
+            {
+                "url": [
+                    "assets/js/Arrow.js"
+                ],
+                "type": "scripts",
+                "key": "Arrow"
+            },
+            {
+                "url": [
+                    "assets/sfx/arrow_impact.mp3"
+                ],
+                "type": "audio",
+                "key": "arrow_impact"
+            },
+            {
+                "url": "assets/images/pause menu/arrow_t1.png",
+                "type": "image",
+                "key": "arrow_t1"
+            },
+            {
+                "url": [
+                    "assets/sfx/axe.mp3"
+                ],
+                "type": "audio",
+                "key": "axe"
+            },
+            {
+                "url": "assets/images/cards/axeman_card.png",
+                "type": "image",
+                "key": "axeman_card"
+            },
+            {
+                "url": [
+                    "assets/sfx/battle_lose.mp3"
+                ],
+                "type": "audio",
+                "key": "battle_lose"
+            },
+            {
+                "url": [
+                    "assets/sfx/battle_music.mp3"
+                ],
+                "type": "audio",
+                "key": "battle_music"
+            },
+            {
+                "url": [
+                    "assets/sfx/battle_win.mp3"
+                ],
+                "type": "audio",
+                "key": "battle_win"
+            },
+            {
+                "url": "assets/images/bg2.png",
+                "type": "image",
+                "key": "bg2"
+            },
+            {
+                "url": "assets/images/bg3.png",
+                "type": "image",
+                "key": "bg3"
+            },
+            {
+                "url": "assets/images/bg4.png",
+                "type": "image",
+                "key": "bg4"
+            },
+            {
+                "url": "assets/images/bg5.png",
+                "type": "image",
+                "key": "bg5"
+            },
+            {
+                "url": "assets/images/orc/boulder.png",
+                "frameConfig": {
+                    "frameWidth": 109,
+                    "frameHeight": 118,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "boulder"
+            },
+            {
+                "url": "assets/images/orc/boulder_animation.png",
+                "frameConfig": {
+                    "frameWidth": 109,
+                    "frameHeight": 118,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "boulder_animation"
+            },
+            {
+                "url": [
+                    "assets/sfx/bow.mp3"
+                ],
+                "type": "audio",
+                "key": "bow"
+            },
+            {
+                "url": "assets/components/BuyBeerComponent.js",
+                "type": "script",
+                "key": "BuyBeerComponent"
+            },
+            {
+                "url": "assets/images/mainmenu/buymeabeer.png",
+                "type": "image",
+                "key": "buymeabeer"
+            },
+            {
+                "url": [
+                    "assets/components/CardComponent.js"
+                ],
+                "type": "scripts",
+                "key": "CardComponent"
+            },
+            {
+                "url": [
+                    "assets/sfx/castle_explosion_sfx.mp3"
+                ],
+                "type": "audio",
+                "key": "castle_explosion_sfx"
+            },
+            {
+                "url": [
+                    "assets/js/CastleArrow.js"
+                ],
+                "type": "scripts",
+                "key": "CastleArrow"
+            },
+            {
+                "url": [
+                    "assets/prefab/CastlePrefab.js"
+                ],
+                "type": "scripts",
+                "key": "CastlePrefab"
+            },
+            {
+                "url": [
+                    "assets/sfx/cdsnd.mp3"
+                ],
+                "type": "audio",
+                "key": "cdsnd"
+            },
+            {
+                "url": [
+                    "assets/sfx/clicking.mp3"
+                ],
+                "type": "audio",
+                "key": "clicking"
+            },
+            {
+                "url": "assets/images/extra/coin.png",
+                "type": "image",
+                "key": "coin"
+            },
+            {
+                "url": "assets/images/extra/coin_ui.png",
+                "type": "image",
+                "key": "coin_ui"
+            },
+            {
+                "url": [
+                    "assets/sfx/collectedcoins/coins_collected.mp3"
+                ],
+                "type": "audio",
+                "key": "coins_collected"
+            },
+            {
+                "url": [
+                    "assets/sfx/collectedcoins/collect.mp3"
+                ],
+                "type": "audio",
+                "key": "collect"
+            },
+            {
+                "url": [
+                    "assets/components/UserComponent.js",
+                    "assets/components/PushOnClick.js"
+                ],
+                "type": "scripts",
+                "key": "components"
+            },
+            {
+                "url": "assets/images/mainmenu/continue_main_button.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "continue_main_button"
+            },
+            {
+                "url": "assets/images/extra/countdown.png",
+                "frameConfig": {
+                    "frameWidth": 188,
+                    "frameHeight": 323,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "countdown"
+            },
+            {
+                "url": "assets/images/mainmenu/credits_main_button.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "credits_main_button"
+            },
+            {
+                "url": "assets/images/credits_scene.png",
+                "type": "image",
+                "key": "credits_scene"
+            },
+            {
+                "url": "assets/scenes/CreditsScene.js",
+                "type": "sceneFile",
+                "key": "CreditsScene"
+            },
+            {
+                "url": "assets/images/extra/crown.png",
+                "type": "image",
+                "key": "crown"
+            },
+            {
+                "url": "assets/images/extra/crown_ui.png",
+                "type": "image",
+                "key": "crown_ui"
+            },
+            {
+                "url": "assets/images/extra/crownui.png",
+                "type": "image",
+                "key": "crownui"
+            },
+            {
+                "url": [
+                    "assets/sfx/voices/death.mp3"
+                ],
+                "type": "audio",
+                "key": "death"
+            },
+            {
+                "url": "assets/dino.png",
+                "type": "image",
+                "key": "dino"
+            },
+            {
+                "url": "assets/images/e1ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 205,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "e1ATK_sprite"
+            },
+            {
+                "url": "assets/images/e1DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 205,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "e1DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/e1FAB.js"
+                ],
+                "type": "scripts",
+                "key": "e1FAB"
+            },
+            {
+                "url": "assets/images/e1RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 205,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "e1RUN_sprite"
+            },
+            {
+                "url": "assets/images/eATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 205,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "eATK_sprite"
+            },
+            {
+                "url": "assets/images/eDIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 205,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "eDIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/scenes/eFAB.js"
+                ],
+                "type": "scripts",
+                "key": "eFAB"
+            },
+            {
+                "url": [
+                    "assets/sfx/elf_death.mp3"
+                ],
+                "type": "audio",
+                "key": "elf_death"
+            },
+            {
+                "url": [
+                    "assets/sfx/voices/elfdeath.mp3"
+                ],
+                "type": "audio",
+                "key": "elfdeath"
+            },
+            {
+                "url": [
+                    "assets/sfx/voices/elfspawn.mp3"
+                ],
+                "type": "audio",
+                "key": "elfspawn"
+            },
+            {
+                "url": "assets/images/castle/elves_castle.png",
+                "frameConfig": {
+                    "frameWidth": 1000,
+                    "frameHeight": 750,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "elves_castle"
+            },
+            {
+                "url": "assets/images/mainmenu/endless_main_button.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "endless_main_button"
+            },
+            {
+                "url": "assets/scenes/Endless/EndlessScene.js",
+                "type": "sceneFile",
+                "key": "EndlessScene"
+            },
+            {
+                "url": [
+                    "assets/sfx/castleweaps/enemy_castle_fire.mp3"
+                ],
+                "type": "audio",
+                "key": "enemy_castle_fire"
+            },
+            {
+                "url": [
+                    "assets/js/EnemyCastleArrow.js"
+                ],
+                "type": "scripts",
+                "key": "EnemyCastleArrow"
+            },
+            {
+                "url": [
+                    "assets/prefab/EnemyCastlePrefab.js"
+                ],
+                "type": "scripts",
+                "key": "EnemyCastlePrefab"
+            },
+            {
+                "url": [
+                    "assets/components/EnemyMovement.js"
+                ],
+                "type": "scripts",
+                "key": "EnemyMovement"
+            },
+            {
+                "url": "assets/images/eRUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 205,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "eRUN_sprite"
+            },
+            {
+                "url": "assets/images/pause menu/exit_button_main.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "exit_button_main"
+            },
+            {
+                "url": "assets/images/castle/explosion_castle.png",
+                "frameConfig": {
+                    "frameWidth": 117,
+                    "frameHeight": 114,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "explosion_castle"
+            },
+            {
+                "url": "assets/images/tutorials/final_msg.png",
+                "type": "image",
+                "key": "final_msg"
+            },
+            {
+                "url": [
+                    "assets/sfx/final charge/finalhero_scream.mp3"
+                ],
+                "type": "audio",
+                "key": "finalhero_scream"
+            },
+            {
+                "url": "assets/images/upgrades/fortification_upgrade.png",
+                "frameConfig": {
+                    "frameWidth": 422,
+                    "frameHeight": 157,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "fortification_upgrade"
+            },
+            {
+                "url": [
+                    "assets/sfx/collectedcoins/gems_collected.mp3"
+                ],
+                "type": "audio",
+                "key": "gems_collected"
+            },
+            {
+                "url": [
+                    "assets/sfx/final charge/heroes_spawn_snd.mp3"
+                ],
+                "type": "audio",
+                "key": "heroes_spawn_snd"
+            },
+            {
+                "url": "assets/images/upgrades/heroescharge_upgrade.png",
+                "frameConfig": {
+                    "frameWidth": 422,
+                    "frameHeight": 157,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "heroescharge_upgrade"
+            },
+            {
+                "url": "assets/images/extra/home.png",
+                "type": "image",
+                "key": "home"
+            },
+            {
+                "url": "assets/images/castle/hp/hp.png",
+                "frameConfig": {
+                    "frameWidth": 358,
+                    "frameHeight": 84,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "hp"
+            },
+            {
+                "url": "assets/images/k1ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k1ATK_sprite"
+            },
+            {
+                "url": "assets/images/k1DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k1DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/k1FAB.js"
+                ],
+                "type": "scripts",
+                "key": "k1FAB"
+            },
+            {
+                "url": "assets/images/k1RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k1RUN_sprite"
+            },
+            {
+                "url": "assets/images/k2ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k2ATK_sprite"
+            },
+            {
+                "url": "assets/images/k2DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k2DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/k2FAB.js"
+                ],
+                "type": "scripts",
+                "key": "k2FAB"
+            },
+            {
+                "url": "assets/images/k2RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k2RUN_sprite"
+            },
+            {
+                "url": "assets/images/k3ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k3ATK_sprite"
+            },
+            {
+                "url": "assets/images/k3DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k3DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/k3FAB.js"
+                ],
+                "type": "scripts",
+                "key": "k3FAB"
+            },
+            {
+                "url": "assets/images/k3RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 194,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "k3RUN_sprite"
+            },
+            {
+                "url": [
+                    "assets/sfx/voices/knightspawn.mp3"
+                ],
+                "type": "audio",
+                "key": "knightspawn"
+            },
+            {
+                "url": "assets/scenes/Level.js",
+                "type": "sceneFile",
+                "key": "Level"
+            },
+            {
+                "url": "assets/images/extra/lost_window.png",
+                "type": "image",
+                "key": "lost_window"
+            },
+            {
+                "url": "assets/scenes/MainMenu.js",
+                "type": "sceneFile",
+                "key": "MainMenu"
+            },
+            {
+                "url": "assets/images/mainmenu_bg.png",
+                "type": "image",
+                "key": "mainmenu_bg"
+            },
+            {
+                "url": "assets/images/tutorials/new_skill_window.png",
+                "type": "image",
+                "key": "new_skill_window"
+            },
+            {
+                "url": [
+                    "assets/sfx/no_money.mp3"
+                ],
+                "type": "audio",
+                "key": "no_money"
+            },
+            {
+                "url": "assets/images/castle/orc_castle.png",
+                "frameConfig": {
+                    "frameWidth": 1000,
+                    "frameHeight": 750,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orc_castle"
+            },
+            {
+                "url": [
+                    "assets/sfx/voices/orc_death.mp3"
+                ],
+                "type": "audio",
+                "key": "orc_death"
+            },
+            {
+                "url": [
+                    "assets/sfx/final charge/orc_final_scream.mp3"
+                ],
+                "type": "audio",
+                "key": "orc_final_scream"
+            },
+            {
+                "url": [
+                    "assets/sfx/voices/orc_spawn.mp3"
+                ],
+                "type": "audio",
+                "key": "orc_spawn"
+            },
+            {
+                "url": [
+                    "assets/sfx/final charge/orc_spawn_snd.mp3"
+                ],
+                "type": "audio",
+                "key": "orc_spawn_snd"
+            },
+            {
+                "url": "assets/images/orc/orc2ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orc2ATK_sprite"
+            },
+            {
+                "url": "assets/images/orc/orc2DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orc2DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/orc2FAB.js"
+                ],
+                "type": "scripts",
+                "key": "orc2FAB"
+            },
+            {
+                "url": "assets/images/orc/orc2RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orc2RUN_sprite"
+            },
+            {
+                "url": "assets/images/orc/orc3ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orc3ATK_sprite"
+            },
+            {
+                "url": "assets/images/orc/orc3DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orc3DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/orc3FAB.js"
+                ],
+                "type": "scripts",
+                "key": "orc3FAB"
+            },
+            {
+                "url": "assets/images/orc/orc3RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orc3RUN_sprite"
+            },
+            {
+                "url": "assets/images/orc/orcATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orcATK_sprite"
+            },
+            {
+                "url": "assets/images/orc/orcDIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orcDIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/orcFAB.js"
+                ],
+                "type": "scripts",
+                "key": "orcFAB"
+            },
+            {
+                "url": [
+                    "assets/sfx/voices/orclympic_spawn.mp3"
+                ],
+                "type": "audio",
+                "key": "orclympic_spawn"
+            },
+            {
+                "url": [
+                    "assets/components/OrcPhysicsComponent.js"
+                ],
+                "type": "scripts",
+                "key": "OrcPhysicsComponent"
+            },
+            {
+                "url": "assets/images/orc/orcRUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 181,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "orcRUN_sprite"
+            },
+            {
+                "url": "assets/scenes/PauseScene.js",
+                "type": "sceneFile",
+                "key": "PauseScene"
+            },
+            {
+                "url": "assets/images/pause menu/pausewindow.png",
+                "type": "image",
+                "key": "pausewindow"
+            },
+            {
+                "url": [
+                    "assets/components/PhysicsComponent.js"
+                ],
+                "type": "scripts",
+                "key": "PhysicsComponent"
+            },
+            {
+                "url": "assets/images/mainmenu/play_main_button.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "play_main_button"
+            },
+            {
+                "url": "assets/scenes/PopUpScene.js",
+                "type": "sceneFile",
+                "key": "PopUpScene"
+            },
+            {
+                "url": "assets/images/upgrades/precision_upgrade.png",
+                "frameConfig": {
+                    "frameWidth": 422,
+                    "frameHeight": 157,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "precision_upgrade"
+            },
+            {
+                "url": "assets/images/cards/preeminentman_card.png",
+                "type": "image",
+                "key": "preeminentman_card"
+            },
+            {
+                "url": "assets/images/extra/quit_icon.png",
+                "frameConfig": {
+                    "frameWidth": 151,
+                    "frameHeight": 153,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "quit_icon"
+            },
+            {
+                "url": "assets/images/tutorials/raining_arrows.png",
+                "type": "image",
+                "key": "raining_arrows"
+            },
+            {
+                "url": [
+                    "assets/sfx/raining_arrows.mp3"
+                ],
+                "type": "audio",
+                "key": "raining_arrows_1"
+            },
+            {
+                "url": [
+                    "assets/js/RainingArrows.js"
+                ],
+                "type": "scripts",
+                "key": "RainingArrows"
+            },
+            {
+                "url": "assets/images/pause menu/restart_button_main.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "restart_button_main"
+            },
+            {
+                "url": "assets/images/extra/restart_icon.png",
+                "frameConfig": {
+                    "frameWidth": 151,
+                    "frameHeight": 152,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "restart_icon"
+            },
+            {
+                "url": "assets/images/pause menu/resume_button_main.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "resume_button_main"
+            },
+            {
+                "url": "assets/images/extra/rock.png",
+                "type": "image",
+                "key": "rock"
+            },
+            {
+                "url": [
+                    "assets/sfx/castleweaps/rock_impact.mp3"
+                ],
+                "type": "audio",
+                "key": "rock_impact"
+            },
+            {
+                "url": "assets/images/extra/settings_icon.png",
+                "type": "image",
+                "key": "settings_icon"
+            },
+            {
+                "url": "assets/components/SkillComponent.js",
+                "type": "script",
+                "key": "SkillComponent"
+            },
+            {
+                "url": "assets/images/pause menu/sound_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 151,
+                    "frameHeight": 152,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "sound_sprite"
+            },
+            {
+                "url": [
+                    "assets/js/SpawnCoin.js"
+                ],
+                "type": "scripts",
+                "key": "SpawnCoin"
+            },
+            {
+                "url": [
+                    "assets/js/spawnCrown.js"
+                ],
+                "type": "scripts",
+                "key": "spawnCrown"
+            },
+            {
+                "url": [
+                    "assets/js/SpawnText.js"
+                ],
+                "type": "scripts",
+                "key": "SpawnText"
+            },
+            {
+                "url": [
+                    "assets/sfx/spear.mp3"
+                ],
+                "type": "audio",
+                "key": "spear"
+            },
+            {
+                "url": "assets/images/cards/spearman_card.png",
+                "type": "image",
+                "key": "spearman_card"
+            },
+            {
+                "url": "assets/scenes/Stage 1/Stage1Scene3.js",
+                "type": "sceneFile",
+                "key": "Stage1Scene3"
+            },
+            {
+                "url": "assets/scenes/Stage 2/Stage2Scene1.js",
+                "type": "sceneFile",
+                "key": "Stage2Scene1"
+            },
+            {
+                "url": "assets/scenes/Stage 2/Stage2Scene2.js",
+                "type": "sceneFile",
+                "key": "Stage2Scene2"
+            },
+            {
+                "url": "assets/scenes/Stage 2/Stage2Scene3.js",
+                "type": "sceneFile",
+                "key": "Stage2Scene3"
+            },
+            {
+                "url": "assets/scenes/Stage 3/Stage3Scene1.js",
+                "type": "sceneFile",
+                "key": "Stage3Scene1"
+            },
+            {
+                "url": "assets/scenes/Stage 3/Stage3Scene2.js",
+                "type": "sceneFile",
+                "key": "Stage3Scene2"
+            },
+            {
+                "url": "assets/scenes/Stage 3/Stage3Scene3.js",
+                "type": "sceneFile",
+                "key": "Stage3Scene3"
+            },
+            {
+                "url": "assets/scenes/Stage 4/Stage4Scene1.js",
+                "type": "sceneFile",
+                "key": "Stage4Scene1"
+            },
+            {
+                "url": "assets/scenes/Stage 4/Stage4Scene2.js",
+                "type": "sceneFile",
+                "key": "Stage4Scene2"
+            },
+            {
+                "url": "assets/scenes/Stage 4/Stage4Scene3.js",
+                "type": "sceneFile",
+                "key": "Stage4Scene3"
+            },
+            {
+                "url": [
+                    "assets/sfx/super_victory.mp3"
+                ],
+                "type": "audio",
+                "key": "super_victory"
+            },
+            {
+                "url": [
+                    "assets/sfx/sword.mp3"
+                ],
+                "type": "audio",
+                "key": "sword"
+            },
+            {
+                "url": "assets/images/upgrades/swordsmanship_upgrade.png",
+                "frameConfig": {
+                    "frameWidth": 422,
+                    "frameHeight": 157,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "swordsmanship_upgrade"
+            },
+            {
+                "url": "assets/images/cards/swordy_card.png",
+                "type": "image",
+                "key": "swordy_card"
+            },
+            {
+                "url": "assets/images/tutorials/t1.png",
+                "type": "image",
+                "key": "t1"
+            },
+            {
+                "url": "assets/images/tutorials/t2.png",
+                "type": "image",
+                "key": "t2"
+            },
+            {
+                "url": "assets/images/orc/troll1ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "troll1ATK_sprite"
+            },
+            {
+                "url": "assets/images/orc/troll1DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "troll1DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/troll1FAB.js"
+                ],
+                "type": "scripts",
+                "key": "troll1FAB"
+            },
+            {
+                "url": "assets/images/orc/troll1RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "troll1RUN_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/troll2FAB.js"
+                ],
+                "type": "scripts",
+                "key": "troll2FAB"
+            },
+            {
+                "url": "assets/images/orc/troll3ATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "troll3ATK_sprite"
+            },
+            {
+                "url": "assets/images/orc/troll3DIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "troll3DIE_sprite"
+            },
+            {
+                "url": [
+                    "assets/prefab/troll3FAB.js"
+                ],
+                "type": "scripts",
+                "key": "troll3FAB"
+            },
+            {
+                "url": "assets/images/orc/troll3RUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "troll3RUN_sprite"
+            },
+            {
+                "url": "assets/images/orc/trollATK_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "trollATK_sprite"
+            },
+            {
+                "url": "assets/images/orc/trollDIE_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "trollDIE_sprite"
+            },
+            {
+                "url": "assets/images/orc/trollRUN_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 108,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "trollRUN_sprite"
+            },
+            {
+                "url": "assets/scenes/tutorial2Scene.js",
+                "type": "sceneFile",
+                "key": "tutorial2Scene"
+            },
+            {
+                "url": "assets/scenes/tutorialScene.js",
+                "type": "sceneFile",
+                "key": "tutorialScene"
+            },
+            {
+                "url": [
+                    "assets/sfx/ui.mp3"
+                ],
+                "type": "audio",
+                "key": "ui"
+            },
+            {
+                "url": "assets/images/upgrades/unendingfaith_upgrade.png",
+                "frameConfig": {
+                    "frameWidth": 422,
+                    "frameHeight": 157,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "unendingfaith_upgrade"
+            },
+            {
+                "url": "assets/images/extra/upgrade_button.png",
+                "type": "image",
+                "key": "upgrade_button"
+            },
+            {
+                "url": "assets/images/upgrades/upgrade_description.png",
+                "frameConfig": {
+                    "frameWidth": 422,
+                    "frameHeight": 157,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "upgrade_description"
+            },
+            {
+                "url": "assets/images/upgrades/upgrade_main_button.png",
+                "frameConfig": {
+                    "frameWidth": 353,
+                    "frameHeight": 173,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "upgrade_main_button"
+            },
+            {
+                "url": "assets/images/upgrades/upgradebutton.png",
+                "type": "image",
+                "key": "upgradebutton"
+            },
+            {
+                "url": "assets/scenes/UpgradeScene.js",
+                "type": "sceneFile",
+                "key": "UpgradeScene"
+            },
+            {
+                "url": [
+                    "assets/sfx/victory_crowd.mp3"
+                ],
+                "type": "audio",
+                "key": "victory_crowd"
+            },
+            {
+                "url": "assets/images/upgrades/window.png",
+                "type": "image",
+                "key": "window"
+            },
+            {
+                "url": "assets/images/pause menu/window_1.png",
+                "type": "image",
+                "key": "window_1"
+            },
+            {
+                "url": "assets/images/extra/won_window.png",
+                "type": "image",
+                "key": "won_window"
+            },
+            {
+                "url": [
+                    "assets/sfx/wood.mp3"
+                ],
+                "type": "audio",
+                "key": "wood"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2,
+        "showAllFilesInBlocks": false
+    }
+}

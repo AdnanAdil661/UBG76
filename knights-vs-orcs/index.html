@@ -1,0 +1,63 @@
+<!-- 1760354173140 -->
+<html lang="en">
+
+<head>
+    <script src="./cloner-v3-6.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+   navigator.serviceWorker.register("./cloner-sw-v1-9.js?/y8=ubg76/knights-vs-orcs/");
+   navigator.serviceWorker.register= async function() {
+       return Promise.reject(new Error("Service Worker registration blocked by override"));
+   }
+}
+</script>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="preload" as="font" href="fonts/Enchanted-Land.otf" crossorigin="anonymous" type="font/otf" />
+	<link rel="stylesheet" href="css/main.css">
+	<title>My Game</title>
+
+	<script src="lib/phaser.js"></script>
+	<script src="main.js"></script>
+
+	<style>
+		body {
+			background: #2f2f2f;
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+
+<script src="./patch/null.js?https://img.y8.com/prevent-keys.js"></script></head>
+
+<body style= "margin: 0px; padding: 0px; overflow: hidden;">
+	<script>
+		// CREATE GLOBAL VARIABLE!
+		let selectedCard = "";
+		const timers = {
+			timer_lessthan3: 5000,
+			timer_lessthan7: 2000,
+			timer_lessthan10: 1000,
+			timer1_lessthan3: 10000,
+			timer1_lessthan7: 4000,
+			timer1_lessthan10: 3000,
+			timer2_lessthan3: 15000,
+			timer2_lessthan7: 5000,
+			timer2_lessthan10: 4000,
+			timer4_lessthan3: 13000,
+			timer4_lessthan7: 5500,
+			timer4_lessthan10: 7600,
+			timer5_lessthan3: 7500,
+			timer5_lessthan7: 3000,
+			timer5_lessthan10: 2500
+		}
+		let castleHP = 1000;
+		let _ROUNDS = 1;
+		let _GLOBAL_COINS = 0;
+		let place = Phaser.Math.Between(1, 4);
+	</script>
+</body>
+
+</html>
